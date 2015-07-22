@@ -15,6 +15,19 @@
 	Hive5.initialize("http://192.168.0.11:9000", "d8444735-15e3-4198-9179-102ba68776fc", "testdevice1");
 	//Hive5.login("ios","","","","");
 	//Hive5.ping();
+      function outputLog(logPlaceId, logContent) {
+        $(logPlaceId).html(logContent);
+      }
+
+      function testLogin(logPlace)
+      {
+        var p = Hive5.Auth.login('ios','','','','');
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          
+        });
+      }
     </script>
   </head>
   <body>
@@ -43,14 +56,37 @@
           <div class="col-lg-4">
           	<h4>Dummy</h4>
 	      <div class="list-group">
-		   <a class="list-group-item" href="javascript:Hive5.ping();">Ping</a>
+		   <a class="list-group-item" href="javascript:Hive5.ping();">ping</a>
 		</div>
 	  </div><!-- /.col-lg-4 -->
-	  <div class="col-lg-4">
+        <div class="col-lg-4">
+    	   <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">Hive5.Auth</h3>
+            </div>
+            <div class="panel-body">
+              Hive5.Auth.login<br>
+              <input class="form-control" placeholder="os" value="ios"/>
+              <input class="form-control" placeholder="build"/>
+              <input class="form-control" placeholder="locale"/>
+              <input class="form-control" placeholder="platform"/>
+              <input class="form-control" placeholder="id"/>
+              <button class="btn btn-success" onclick="testLogin('#login-output');">Run</button>
+            </div>
+            <div class="panel-body">
+              <div id="login-output">
+                output
+              </div>
+            </div>
+          </div>
+        </div><!-- /.col-lg-4 -->
+      
+
+    <div class="col-lg-4">
           	<h4>Auth</h4>
 	      <div class="list-group">
-		   <a class="list-group-item" href="javascript:Hive5.Auth.login('ios','','','','');">login</a> 
-		</div>
+		   <a class="list-group-item" href="javascript:testLogin('aa');">login</a> 
+            </div>
 	  </div><!-- /.col-lg-4 -->
     </div>
     <div id="myModal" class="modal fade">

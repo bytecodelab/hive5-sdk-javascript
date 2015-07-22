@@ -30,20 +30,86 @@
     root.Hive5._uuid = uuid;
   };
 
-  Hive5.ping = function() {
-    var url = root.Hive5._host + "/ping";
+  Hive5._request = function(options) {
+    var route = options.route;
+    var method = options.method;
+    var data = options.data || {};
+    var withoutVersion = options.withoutVersion;
+    
+    var url = Hive5._host;
+    if (url.charAt(url.length - 1) !== "/") {
+      url += "/";
+    }
+    if (!withoutVersion) {
+      url += Hive5._apiVersion + "/";
+    }
 
-    var xhr = new Hive5.XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if(xhr.status == 200)
-          alert(xhr.responseText);
-        else
-          alert("Error loading page status:"+xhr.status+"\n");
-      }
+    url += route;
+
+    if (method === "GET") {
+      url += "?" + data;
+      data = "";
+    } else {
+      data = JSON.stringify(data);
+    }
+
+    var request = {
+      url: url,
+      method: method,
+      data: data
     };
-    xhr.send();
+
+    var promise = new Promise(function(resolve, reject) {
+      var response = {
+        request: request
+      };
+
+     var xhr = new Hive5.XMLHttpRequest();
+     response.xhr = xhr;
+
+      xhr.open(request.method, request.url, true);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          response.status = xhr.status;
+
+          if(xhr.status == 200) {
+            response.raw = xhr.responseText;
+            resolve(response);
+          }
+          else {
+            reject(response);
+          }
+        }
+      };
+
+      // add headers
+      xhr.setRequestHeader("X-APP-KEY", Hive5._appKey);
+      xhr.setRequestHeader("X-AUTH-UUID", Hive5._uuid);
+
+      if (request.data) {
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(request.data);
+      } else {
+        xhr.send();
+      }
+    });
+
+    return promise;
+  }
+
+  Hive5.ping = function() {
+    var options = {
+      method: "GET",
+      route: "ping",
+      data: "",
+      withoutVersion: true,
+    };
+
+    Hive5._request(options).then(function (response) {
+      alert(response.raw);
+    });
+    
   };
 } (this));
 
@@ -68,45 +134,29 @@
      * <p>description</p>
      *
      * @param {string} os Operation System (ex, ios, android)
+     * @param {string} build Build version (ex, 1.0.0)
+     * @param {string} locale Locale (ex, ko-KR)
+     * @param {string} platform Authentication platform (ex, facebook, kakao)
+     * @param {string} id User Id dedicated to platform
      * @see Hive5.Auth.login
      * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
     login: function (os, build, locale, platform, id) {
-      var url = root.Hive5._host + "/" + root.Hive5._apiVersion + "/auth/login";
-
       var data = { 
-        "user": { "platform": platform, "id": id },
-        "os":os,
-        "build":build,
-        "locale":locale,
+        user: { platform: platform, id: id },
+        os: os,
+        build: build,
+        locale: locale,
       };
 
-      var xhr = new Hive5.XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              var response;
-              try {
-                //response = JSON.parse(xhr.responseText);
-                response = xhr.responseText;
-              } catch (e) {
-                alert(e);
-              }
-              if (response) {
-                alert(response);
-              }
-            } else {
-              alert(xhr.status);
-            }
-         }
-      };
+       var options = {
+          method: "POST",
+          route: "auth/login",
+          data: data,
+        };
 
-      xhr.open("POST", url, true);
-      xhr.setRequestHeader('X-APP-KEY', Hive5._appKey);
-      xhr.setRequestHeader('X-AUTH-UUID', Hive5._uuid);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify(data));
+        return Hive5._request(options);
     },
 
   };
