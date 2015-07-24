@@ -30,6 +30,14 @@
     root.Hive5._uuid = uuid;
   };
 
+  /**
+   * Options:
+   *   route: is classes, users, login, etc.
+   *   method: the http method for the REST API. ( "GET" or "POST")
+   *   data: the payload as an object, or null if there is none.
+   *   withoutVersion: boolean that means whether insert apiVersion in to path or not
+   * @ignore
+   */
   Hive5._request = function(options) {
     var route = options.route;
     var method = options.method;
@@ -86,6 +94,15 @@
       // add headers
       xhr.setRequestHeader("X-APP-KEY", Hive5._appKey);
       xhr.setRequestHeader("X-AUTH-UUID", Hive5._uuid);
+      if (Hive5._accessToken) {
+        xhr.setRequestHeader("X-AUTH-TOKEN", Hive5._accessToken);
+      }
+      if (Hive5._sessionKey) {
+        xhr.setRequestHeader("X-AUTH-SESSION", Hive5._sessionKey);
+      }
+      if (Hive5._requestId) {
+        xhr.setRequestHeader("X-REQUEST-ID", Hive5._requestId);
+      }
 
       if (request.data) {
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -96,14 +113,14 @@
     });
 
     return promise;
-  }
+  };
 
   Hive5.ping = function() {
     var options = {
       method: "GET",
       route: "ping",
       data: "",
-      withoutVersion: true,
+      withoutVersion: true
     };
 
     Hive5._request(options).then(function (response) {
@@ -111,7 +128,7 @@
     });
     
   };
-} (this));
+}(this));
 
 (function(root) {
   root.Hive5 = root.Hive5 || {};
@@ -143,21 +160,89 @@
      *     the login is complete.
      */
     login: function (os, build, locale, platform, id) {
-      var data = { 
-        user: { platform: platform, id: id },
+      var data = {
         os: os,
         build: build,
-        locale: locale,
+        locale: locale
       };
 
-       var options = {
+      if (platform && id) {
+        data.user = {};
+        if (platform) {
+          data.user.platform = platform;
+        }
+        if (id) {
+          data.user.id = id;
+        }
+      }
+
+      var options = {
+        method: "POST",
+        route: "auth/login",
+        data: data
+      };
+
+      var p = new Promise(function(resolve, reject) {
+        Hive5._request(options).then(
+            function(response) {
+              var jsonData = JSON.parse(response.raw);
+
+              Hive5._accessToken = jsonData.access_token;
+              Hive5._sessionKey = jsonData.session_key;
+              Hive5._user = jsonData.user;
+
+              resolve(response);
+             }
+        );
+      });
+
+
+      return p;
+    },
+
+    delete: function () {
+        var options = {
           method: "POST",
-          route: "auth/login",
-          data: data,
+          route: "auth/delete",
+          data: {}
         };
 
         return Hive5._request(options);
-    },
-
+    }
   };
-} (this));
+}(this));
+
+(function(root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * @class
+   *
+   * <p>A Hive5.Settings object is for Settings like setting nickname and so on.</p>
+   */
+  Hive5.Settings = {
+
+    /**
+     * Check availability of nickname in a Hive5.Settings. On success, this saves the session to localStorage,
+     * so you can retrieve the result.
+     * <code>current</code>.
+     *
+     * <p>description</p>
+     *
+     * @param {string} nickname Nickname for a user
+     * @see Hive5.Auth.login
+     * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
+     *     the login is complete.
+     */
+    checkNicknameAvailability: function (nickname) {
+
+      var options = {
+        method: "GET",
+        route: "settings/nickname/is_available/" + nickname
+      };
+
+      return Hive5._request(options);
+    }
+  };
+}(this));
