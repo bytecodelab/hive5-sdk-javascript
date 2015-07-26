@@ -58,7 +58,7 @@
       url += "?" + data;
       data = "";
     } else {
-      data = JSON.stringify(data);
+      //data = JSON.stringify(data);
     }
 
     var request = {
@@ -179,7 +179,7 @@
       var options = {
         method: "POST",
         route: "auth/login",
-        data: data
+        data: JSON.stringify(data)
       };
 
       var p = new Promise(function(resolve, reject) {
@@ -231,7 +231,7 @@
      * <p>description</p>
      *
      * @param {string} nickname Nickname for a user
-     * @see Hive5.Auth.login
+     * @see Hive5.Settings.checkNicknameAvailability
      * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
@@ -240,6 +240,43 @@
       var options = {
         method: "GET",
         route: "settings/nickname/is_available/" + nickname
+      };
+
+      return Hive5._request(options);
+    }
+  };
+}(this));
+
+(function(root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * @class
+   *
+   * <p>A Hive5.Script object is for Cloud Scripting</p>
+   */
+  Hive5.Script = {
+
+    /**
+     * Run script with paramters in a Hive5.Settings.
+     * On success, return result of running script in cloud.
+     * <code>current</code>.
+     *
+     * <p>description</p>
+     *
+     * @param {string} scriptName Name of a Script
+     * @param {string} scriptParams Paramters for a Script (JSON)
+     * @see Hive5.Script.runScript
+     * @return {Hive5.Promise} A promise that is fulfilled with the result when
+     *     running script is complete.
+     */
+    runScript: function (scriptName, scriptParams) {
+
+      var options = {
+        method: "POST",
+        route: "scripts/run/" + scriptName,
+        data: scriptParams
       };
 
       return Hive5._request(options);

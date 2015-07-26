@@ -64,8 +64,22 @@
         var p = Hive5.Settings.checkNicknameAvailability();
         p.then(function(response) {
           outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      }
 
-          clearUserInfo();
+      /*
+       *
+       * Script
+       *
+       */
+      function testScriptRunScript(logPlace)
+      {
+        var form = document.getElementById("script-runscript-form");
+        var p = Hive5.Script.runScript(form.scriptName.value, form.scriptParams.value);
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
         }).catch(function (response) {
           outputLog(logPlace, response.raw);
         });
@@ -97,6 +111,18 @@
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#Hive5.Auth.login">login</a></li>
                 <li><a href="#Hive5.Auth.delete">delete</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#Hive5.Settings" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#Hive5.Settings.checkNicknameAvailability">checkNicknameAvailability</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#Hive5.Script" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Script <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#Hive5.Script.runScript">runScript</a></li>
               </ul>
             </li>
           </ul>
@@ -199,6 +225,50 @@
                 </div>
               </div>
               
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Hive5.Settings end -->
+
+      <!--
+      *
+      * Hive5.Script
+      *
+      -->
+      <div class="row">
+        <div class="col-lg-12">
+          <a name="Hive5.Script"></a>
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">Hive5.Script</h3>
+            </div>
+            <div class="panel-body">
+
+              <!-- Hive5.Script.runScript -->
+              <div class="col-lg-6">
+                <a class="anchor" name="Hive5.Script.runScript"></a>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Hive5.Script.runScript</div>
+                  <div class="panel-body">
+                    <form id="script-runscript-form" onsubmit="return false;">
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Script Name" name="scriptName" value="echo"/>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Parameters(JSON)" name="scriptParams" value='{ "echo": "abcd" }'/>
+                      </div>
+                      <div class="form-group">
+                        <button class="form-control btn btn-sm btn-success" onclick="testScriptRunScript('#settings-runscript-output');">Run</button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="panel-body">
+                    <div id="settings-runscript-output" class="well"></div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
