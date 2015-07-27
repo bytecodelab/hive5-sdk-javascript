@@ -8,87 +8,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/paper/bootstrap.min.css">
 	<script src="./hive5.js"></script>
-	<script>
-	// 192.168.0.11:9000
-	// http://beta.hornet.hive5.io
-	// 10435356-4754-4a7a-8877-c343bc1c8314
-	Hive5.initialize("http://alpha.hornet.hive5.io", "d8444735-15e3-4198-9179-102ba68776fc", "testdevice4");
-	//Hive5.login("ios","","","","");
-	//Hive5.ping();
-      function outputLog(logPlaceId, logContent) {
-        var now = new Date();
-        var dateTimeHtml = '<br><div class="label label-default">'+now.toDateString() + ' ' + now.toTimeString() +'</div>';
-        $(logPlaceId).html(logContent + dateTimeHtml);
-      }
-
-      function clearUserInfo()
-      {
-        $('#platform').html("");
-        $('#id').html("");
-      }
-
-      function testAuthLogin(logPlace)
-      {
-        var p = Hive5.Auth.login('ios','','','','');
-        p.then(function(response) {
-          outputLog(logPlace, response.raw);
-
-          var jsonData = JSON.parse(response.raw);
-          $('#platform').html(jsonData.user.platform);
-          $('#id').html(jsonData.user.id);
-
-        }).catch(function (response) {
-          outputLog(logPlace, response.raw);
-        });
-      }
-
-      function testAuthDelete(logPlace)
-      {
-        var p = Hive5.Auth.delete();
-        p.then(function(response) {
-          outputLog(logPlace, response.raw);
-
-          clearUserInfo();
-        }).catch(function (response) {
-          outputLog(logPlace, response.raw);
-        });
-      }
-
-      /*
-      *
-      * Settings
-      *
-       */
-      function testSettingsCheckNicknameAvailability(logPlace)
-      {
-        var p = Hive5.Settings.checkNicknameAvailability();
-        p.then(function(response) {
-          outputLog(logPlace, response.raw);
-        }).catch(function (response) {
-          outputLog(logPlace, response.raw);
-        });
-      }
-
-      /*
-       *
-       * Script
-       *
-       */
-      function testScriptRunScript(logPlace)
-      {
-        var form = document.getElementById("script-runscript-form");
-        var p = Hive5.Script.runScript(form.scriptName.value, form.scriptParams.value);
-        p.then(function(response) {
-          outputLog(logPlace, response.raw);
-        }).catch(function (response) {
-          outputLog(logPlace, response.raw);
-        });
-      }
-
-    </script>
     <style>
       .well { overflow:scroll; }
-      .anchor { padding-top:90px; margin-top:-90px;}
+      .anchor { padding-top:90px; margin-top:-90px; }
+      pre { margin:0px;border:0px;padding:0px;background:transparent; }
     </style>
   </head>
   <body>
@@ -133,8 +56,41 @@
         </div>
       </div>
     </div>
+
     <div class="container" style="margin-top:80px;">
-      <h1>Hive5 Javascript SDK</h1>
+      <h2>Hive5 Javascript SDK
+        <button class="btn btn-sm btn-default pull-right" onclick="showInitializer();" id="initializeButton">Re-Initialize</button>
+      </h2>
+    </div>
+
+    <div class="container" id="initializer">
+      <!--
+      *
+      * Hive5.Initialize
+      *
+      -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-primary" id="init-form">
+            <div class="panel-heading">
+              <h3 class="panel-title">Initialize</h3>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <input class="form-control host" placeholder="Host" value="http://alpha.hornet.hive5.io"/>
+                <input class="form-control app-key" placeholder="App Key" value="d8444735-15e3-4198-9179-102ba68776fc"/>
+                <input class="form-control uuid" placeholder="Device Id(UDID)" value="testdevice4" />
+              </div>
+              <div class="form-group">
+                <button class="form-control btn btn-sm btn-success submit">Initialize</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="function-tests">
       <!--
       *
       * Hive5.Auth
@@ -143,7 +99,7 @@
       <div class="row">
         <div class="col-lg-12">
           <a name="Hive5.Auth"></a>
-          <div class="panel panel-success">
+          <div class="panel panel-danger">
             <div class="panel-heading">
               <h3 class="panel-title">Hive5.Auth</h3>
             </div>
@@ -152,39 +108,45 @@
               <!-- Hive5.Auth.login -->
               <div class="col-lg-6">
                 <a class="anchor" name="Hive5.Auth.login"></a>
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="auth-login">
                   <div class="panel-heading">Hive5.Auth.login</div>
                   <div class="panel-body">
                     <div class="form-group">
-                      <input class="form-control" placeholder="os" value="ios"/>
-                      <input class="form-control" placeholder="build"/>
-                      <input class="form-control" placeholder="locale"/>
-                      <input class="form-control" placeholder="platform"/>
-                      <input class="form-control" placeholder="id"/>
+                      <input class="form-control os" placeholder="os" value="ios"/>
+                      <input class="form-control build" placeholder="build" value="1.0.0"/>
+                      <input class="form-control locale" placeholder="locale" value="en-US"/>
+                      <input class="form-control platform" placeholder="platform" />
+                      <input class="form-control id" placeholder="id" />
                     </div>
                     <div class="form-group">
-                      <button class="form-control btn btn-sm btn-success" onclick="testAuthLogin('#login-output');">Run</button>
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
                     </div>
                   </div>
                   <div class="panel-body">
-                    <div id="login-output" class="well"></div>
+                    <div class="output well"></div>
                   </div>
                 </div>
               </div>
+              <!-- Hive5.Auth.login end -->
 
               <!-- Hive5.Auth.delete -->
               <div class="col-lg-6">
                 <a class="anchor" name="Hive5.Auth.delete"></a>
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="auth-delete">
                   <div class="panel-heading">Hive5.Auth.delete</div>
                   <div class="panel-body">
-                    <button class="form-control btn btn-sm btn-success" onclick="testAuthDelete('#auth-delete-output');">Run</button>
+                    <button class="form-control btn btn-sm btn-primary submit">
+                      <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                    </button>
                   </div>
                   <div class="panel-body">
-                    <div id="auth-delete-output" class="well"></div>
+                    <div class="output well"></div>
                   </div>
                 </div>
               </div>
+              <!-- Hive5.Auth.delete end -->
 
             </div>
           </div>
@@ -209,22 +171,25 @@
               <!-- Hive5.Settings.checkNicknameAvailability -->
               <div class="col-lg-6">
                 <a class="anchor" name="Hive5.Settings.checkNicknameAvailability"></a>
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="settings-checknicknameavailability">
                   <div class="panel-heading">Hive5.Settings.checkNicknameAvailability</div>
                   <div class="panel-body">
                     <div class="form-group">
-                      <input class="form-control" placeholder="nickname" name="settings.checkNicknameAvailability.nickname"/>
+                      <input class="form-control nickname" placeholder="Nickname" />
                     </div>
                     <div class="form-group">
-                      <button class="form-control btn btn-sm btn-success" onclick="testSettingsCheckNicknameAvailability('#settings-check-nickname-availability-output');">Run</button>
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
                     </div>
                   </div>
                   <div class="panel-body">
-                    <div id="settings-check-nickname-availability-output" class="well"></div>
+                    <div class="output well"></div>
                   </div>
                 </div>
               </div>
-              
+              <!-- Hive5.Settings.checkNicknameAvailability end -->
+
             </div>
           </div>
         </div>
@@ -248,26 +213,27 @@
               <!-- Hive5.Script.runScript -->
               <div class="col-lg-6">
                 <a class="anchor" name="Hive5.Script.runScript"></a>
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="script-runscript">
                   <div class="panel-heading">Hive5.Script.runScript</div>
                   <div class="panel-body">
-                    <form id="script-runscript-form" onsubmit="return false;">
-                      <div class="form-group">
-                        <input class="form-control" placeholder="Script Name" name="scriptName" value="echo"/>
-                      </div>
-                      <div class="form-group">
-                        <input class="form-control" placeholder="Parameters(JSON)" name="scriptParams" value='{ "echo": "abcd" }'/>
-                      </div>
-                      <div class="form-group">
-                        <button class="form-control btn btn-sm btn-success" onclick="testScriptRunScript('#settings-runscript-output');">Run</button>
-                      </div>
-                    </form>
+                    <div class="form-group">
+                      <input class="form-control script-name" placeholder="Script Name" value="echo"/>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control script-params" placeholder="Parameters(JSON)" value='{ "echo": "abcd" }'/>
+                    </div>
+                    <div class="form-group">
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
+                    </div>
                   </div>
                   <div class="panel-body">
-                    <div id="settings-runscript-output" class="well"></div>
+                    <div class="output well"></div>
                   </div>
                 </div>
               </div>
+              <!-- Hive5.Script.runScript end -->
 
             </div>
           </div>
@@ -278,5 +244,160 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+
+      /*
+       *
+       * Common
+       *
+       */
+      function outputLog(logPlaceId, logContent) {
+        var outputContent = "";
+        try {
+          outputContent = "<pre>"+JSON.stringify(JSON.parse(logContent), null, 2)+"</pre>";
+        } catch (ex) {
+          outputContent = logContent;
+        }
+
+        var now = new Date();
+        var dateTimeHtml = '<br><div class="label label-default">'+now.toDateString() + ' ' + now.toTimeString() +'</div>';
+        $(logPlaceId).html(outputContent + dateTimeHtml);
+      }
+
+      function clearUserInfo()
+      {
+        $('#platform').html("");
+        $('#id').html("");
+      }
+
+      /*
+       *
+       * Init
+       *
+       */
+
+      function showInitializer() {
+        $('#function-tests').hide();
+        $('#initializer').show();
+        $('#initializeButton').hide();
+      }
+
+      $('#init-form .submit').on("click", function () {
+        if (!$('#init-form .host').val()) {
+          alert("Host cannot be emtpy!");
+          $('#init-form .host').focus();
+          return false;
+        }
+
+        if (!$('#init-form .app-key').val()) {
+          alert("App Key cannot be emtpy!");
+          $('#init-form .app-key').focus();
+          return false;
+        }
+
+        if (!$('#init-form .uuid').val()) {
+          alert("Device Id cannot be emtpy!");
+          $('#init-form .uuid').focus();
+          return false;
+        }
+
+
+        Hive5.initialize($('#init-form .host').val(),
+                $('#init-form .app-key').val(),
+                $('#init-form .uuid').val());
+
+        $('#initializer').hide();
+        $('#function-tests').show();
+        $('#initializeButton').show();
+
+        return false;
+      });
+
+      /*
+       *
+       * Auth
+       *
+       */
+      $('#auth-login .submit').on("click", function () {
+        var logPlace = '#auth-login .output';
+        var p = Hive5.Auth.login($('#auth-login .os').val(),
+                $('#auth-login .build').val(),
+                $('#auth-login .locale').val(),
+                $('#auth-login .platform').val(),
+                $('#auth-login .id').val());
+
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
+
+          var jsonData = JSON.parse(response.raw);
+          $('#platform').html(jsonData.user.platform);
+          $('#id').html(jsonData.user.id);
+
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      $('#auth-delete .submit').on("click",  function () {
+        var logPlace = '#auth-delete .output';
+
+        var p = Hive5.Auth.delete();
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
+
+          clearUserInfo();
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      /*
+       *
+       * Settings
+       *
+       */
+      $('#settings-checknicknameavailability .submit').on("click", function() {
+        var logPlace = '#settings-checknicknameavailability .output';
+
+        if (!$('#settings-checknicknameavailability .nickname').val()) {
+          alert("Nickname cannot be null!");
+          $('#settings-checknicknameavailability .nickname').focus();
+          return;
+        }
+
+        var p = Hive5.Settings.checkNicknameAvailability($('#settings-checknicknameavailability .nickname').val());
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      /*
+       *
+       * Script
+       *
+       */
+      $('#script-runscript .submit').on("click", function ()
+      {
+        if (!$('#script-runscript .script-name').val()) {
+          alert('Script Name cannot be empty!');
+          $('#script-runscript .script-name').focus();
+          return;
+        }
+
+        var logPlace = '#script-runscript .output';
+        var p = Hive5.Script.runScript($('#script-runscript .script-name').val(),
+                $('#script-runscript .script-params').val());
+        p.then(function(response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      /* post script */
+      showInitializer();
+    </script>
   </body>
 </html>

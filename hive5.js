@@ -41,7 +41,7 @@
   Hive5._request = function(options) {
     var route = options.route;
     var method = options.method;
-    var data = options.data || {};
+    var data = options.data;
     var withoutVersion = options.withoutVersion;
     
     var url = Hive5._host;
@@ -203,8 +203,7 @@
     delete: function () {
         var options = {
           method: "POST",
-          route: "auth/delete",
-          data: {}
+          route: "auth/delete"
         };
 
         return Hive5._request(options);
