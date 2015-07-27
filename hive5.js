@@ -200,6 +200,18 @@
       return p;
     },
 
+    /**
+     * Withdraws from the game.
+     *
+     * <code>
+     * Hive5.Auth.delete().then(function (response) {
+     *  // handle result
+     * }).catch(function (response) {
+     *  // handle error
+     * });</code>.
+     *
+     * <p>description</p>
+     */
     delete: function () {
         var options = {
           method: "POST",
