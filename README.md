@@ -34,6 +34,9 @@ function foo(name) {
 ./jsdoc hive5.js
 ```
 
+jsdoc은 아래 페이지에서 배포 중이다.
+[https://github.com/jsdoc3/jsdoc/releases](https://github.com/jsdoc3/jsdoc/releases)
+
 
 ### Learn more
 JSDoc에 대한 더 자세한 사항은 아래 링크를 참고하라.  
