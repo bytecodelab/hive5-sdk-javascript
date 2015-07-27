@@ -7,6 +7,38 @@ Hive5 Javascript SDK
 https://www.playframework.com/documentation/2.4.x/CorsFilter
 
 
+# Documenting APIs
+자동 문서화를 위해 JSDoc의 규약을 따른다.  
+JSDoc은 /**로 시작하는 주석만을 인식하여 처리한다.  
+
+```js
+/** 간단한 샘플 */
+function foo() {
+}
+```
+
+documentation tag를 잘 활용하면 좋다.
+```js
+/** 
+ * 다양한 documentation tag가 있으니 공부하여 적용할 것
+ * @constructor
+ * @param {string} name - Name of instance
+ * @return {foo} It returns an instance of foo
+ */
+function foo(name) {
+}
+```
+
+문서 생성은 jsdoc 프로그램을 이용하여 아래와 같이 생성한다.
+```
+./jsdoc hive5.js
+```
+
+
+### Learn more
+JSDoc에 대한 더 자세한 사항은 아래 링크를 참고하라.  
+[http://usejsdoc.org/](http://usejsdoc.org/)
+
 # Unit Test
 유닛테스트를 위해 Javascript용 유닛테스트 프레임웍인 QUnit을 이용하고 있다.  
 
