@@ -1,7 +1,24 @@
+/*!
+ * @fileOverview Hive5 JavaScript SDK
+ * <br>
+ * <br>Visit {@link http://www.hive5.io}
+ * @version 1.0.0
+ * @author Gilbert Lee, Artie Choi
+ * @copyright 2015 BytecodeLab, Co.
+ */
 (function(root) {
   root.Hive5 = root.Hive5 || {};
+
+  /**
+   * Contains everything of Hive5.
+   * @namespace Hive5
+   */
   var Hive5 = root.Hive5;
 
+  /**
+   * @memberOf Hive5
+   * @var SDK Version
+   */
   Hive5.VERSION = "js1.0.0";
   Hive5._apiVersion = "v6";
 }(this));
@@ -24,6 +41,13 @@
   root.Hive5 = root.Hive5 || {};
   var Hive5 = root.Hive5;
 
+  /**
+   * Initialize Hive5
+   * @memberOf Hive5
+   * @param {string} host - Given Hive5 host
+   * @param {string} appKey - Given app key
+   * @param {string} uuid - Unique device Id
+   */
   Hive5.initialize = function (host, appKey, uuid) {
     root.Hive5._host = host;
     root.Hive5._appKey = appKey;
@@ -115,6 +139,9 @@
     return promise;
   };
 
+  /**
+   * @ignore
+   */
   Hive5.ping = function() {
     var options = {
       method: "GET",
@@ -135,12 +162,11 @@
   var Hive5 = root.Hive5;
 
   /**
-  * @class
-  *
-  * <p>A Hive5.Auth object is a local representation of an authentication to the
-  * Hive5 cloud. It has authentication specific methods like authentication, signing up, 
-  * switch social platform.</p>
-  */
+   * Representation of an authentication to the
+   * Hive5 cloud
+   * @namespace Hive5.Auth
+   * @memberOf Hive5
+   */
   Hive5.Auth = {
 
     /**
@@ -148,14 +174,12 @@
      * so you can retrieve the currently logged in user using
      * <code>current</code>.
      *
-     * <p>description</p>
-     *
-     * @param {string} os Operation System (ex, ios, android)
-     * @param {string} build Build version (ex, 1.0.0)
-     * @param {string} locale Locale (ex, ko-KR)
-     * @param {string} platform Authentication platform (ex, facebook, kakao)
-     * @param {string} id User Id dedicated to platform
-     * @see Hive5.Auth.login
+     * @memberOf Hive5.Auth
+     * @param {string} [os] Operation System (ex, ios, android)
+     * @param {string} [build] Build version (ex, 1.0.0)
+     * @param {string} [locale] Locale (ex, ko-KR)
+     * @param {string} [platform] Authentication platform (ex, facebook, kakao)
+     * @param {string} [id] User Id dedicated to platform
      * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
@@ -202,15 +226,14 @@
 
     /**
      * Withdraws from the game.
-     *
-     * <code>
+     * @memberOf Hive5.Auth
+     * @example
      * Hive5.Auth.delete().then(function (response) {
      *  // handle result
      * }).catch(function (response) {
      *  // handle error
-     * });</code>.
+     * });
      *
-     * <p>description</p>
      */
     delete: function () {
         var options = {
@@ -221,6 +244,7 @@
         return Hive5._request(options);
     }
   };
+
 }(this));
 
 (function(root) {
@@ -228,9 +252,9 @@
   var Hive5 = root.Hive5;
 
   /**
-   * @class
-   *
-   * <p>A Hive5.Settings object is for Settings like setting nickname and so on.</p>
+   * Representation of settings like setting nickname and so on.
+   * @namespace Hive5.Settings
+   * @memberOf Hive5
    */
   Hive5.Settings = {
 
@@ -241,8 +265,8 @@
      *
      * <p>description</p>
      *
+     * @memberOf Hive5.Settings
      * @param {string} nickname Nickname for a user
-     * @see Hive5.Settings.checkNicknameAvailability
      * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
@@ -263,9 +287,9 @@
   var Hive5 = root.Hive5;
 
   /**
-   * @class
-   *
-   * <p>A Hive5.Script object is for Cloud Scripting</p>
+   * Representation of Cloud Scripting.
+   * @namespace Hive5.Script
+   * @memberOf Hive5
    */
   Hive5.Script = {
 
@@ -276,9 +300,9 @@
      *
      * <p>description</p>
      *
-     * @param {string} scriptName Name of a Script
-     * @param {string} scriptParams Paramters for a Script (JSON)
-     * @see Hive5.Script.runScript
+     * @memberOf Hive5.Script
+     * @param {string} scriptName - Name of a Script
+     * @param {string} [scriptParams] - Paramters for a Script (JSON)
      * @return {Hive5.Promise} A promise that is fulfilled with the result when
      *     running script is complete.
      */
