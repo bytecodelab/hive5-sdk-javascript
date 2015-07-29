@@ -69,8 +69,10 @@ QUnit.test( "Your async something test" function( assert ) {
   var done = assert.async();
   barAsync().then(function(result) {
     alert.ok(result.error == null), "Passed!");
+    done();
   }).catch(function(error) {
     alert.ok(false, error.message);
+    done();
   });
 }
 ```
