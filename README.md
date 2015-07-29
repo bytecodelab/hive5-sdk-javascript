@@ -34,6 +34,31 @@ function foo(name) {
 ./jsdoc hive5.js
 ```
 
+설정 파일은 아래와 같이 설정한다.  
+markdown을 지원하기 위해 어떻게 하고 있는 지 주물하가.
+
+```json
+  {
+  "tags": {
+      "allowUnknownTags": true
+  },
+  "source": {
+      "includePattern": ".+\\.js(doc)?$",
+      "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false,
+      "default": {
+          "outputSourceFiles": true
+      }
+  }
+}
+
+}
+```
+
 jsdoc은 아래 페이지에서 배포 중이다.
 [https://github.com/jsdoc3/jsdoc/releases](https://github.com/jsdoc3/jsdoc/releases)
 
