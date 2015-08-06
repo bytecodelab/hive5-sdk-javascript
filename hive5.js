@@ -91,10 +91,8 @@
       }
       data = "";
     } else {
-      //data = JSON.stringify(data);
+      data = JSON.stringify(data);
     }
-
-    console.log(url);
 
     var request = {
       url: url,
@@ -214,7 +212,7 @@
       var options = {
         method: "POST",
         route: "auth/login",
-        data: JSON.stringify(data)
+        data: data
       };
 
       var p = new Promise(function(resolve, reject) {
@@ -230,7 +228,6 @@
              }
         );
       });
-
 
       return p;
     },
@@ -307,8 +304,8 @@
     /**
      * 리더보드에 점수를 제출한다
      * @memberOf Hive5.Leaderboard
-     * @param {string} [leaderboardKey] Leaderboard Key
-     * @param {number} [score] 점수
+     * @param {string} leaderboardKey Leaderboard Key
+     * @param {number} score 점수
      * @param {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
      */
     submitScore: function (leaderboardKey, score, extras) {
@@ -321,7 +318,7 @@
       var options = {
         method: "POST",
         route: "leaderboards/" + leaderboardKey + "/scores",
-        data: JSON.stringify(data)
+        data: data
       };
 
       return Hive5._request(options);

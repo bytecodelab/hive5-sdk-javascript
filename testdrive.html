@@ -169,12 +169,12 @@
             </div>
             <div class="panel-body">
 
-              <!-- Hive5.Leaderboard.submitScores -->
+              <!-- Hive5.Leaderboard.submitScore -->
               <div class="col-lg-6">
-                <a class="anchor" name="Hive5.Leaderboard.submitScores"></a>
+                <a class="anchor" name="Hive5.Leaderboard.submitScore"></a>
 
                 <div class="panel panel-default" id="leaderboard-submitscore">
-                  <div class="panel-heading">Hive5.Leaderboard.submitScores</div>
+                  <div class="panel-heading">Hive5.Leaderboard.submitScore</div>
                   <div class="panel-body">
                     <div class="form-group">
                       <input class="form-control score" placeholder="Score"/>
@@ -193,7 +193,7 @@
                   </div>
                 </div>
               </div>
-              <!-- Hive5.Leaderboard.submitScores end -->
+              <!-- Hive5.Leaderboard.submitScore end -->
 
               <!-- Hive5.Leaderboard.getMyScore -->
               <div class="col-lg-6">
@@ -552,7 +552,7 @@
 
         var logPlace = '#script-runscript .output';
         var p = Hive5.Script.runScript($('#script-runscript .script-name').val(),
-                $('#script-runscript .script-params').val());
+                JSON.parse($('#script-runscript .script-params').val()));
         p.then(function(response) {
           outputLog(logPlace, response.raw);
         }).catch(function (response) {
