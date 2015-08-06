@@ -286,6 +286,23 @@
       };
 
       return Hive5._request(options);
+    },
+
+    /**
+     * 닉네임 설정
+     * @memberOf Hive5.Settings
+     * @param {string} nickname Nickname
+     * @return {Hive5.Promise}
+     */
+    setNickname: function (nickname) {
+
+      var options = {
+        method: "POST",
+        route: "settings/nickname/set",
+        data : {nickname: nickname}
+      };
+
+      return Hive5._request(options);
     }
   };
 }(this));

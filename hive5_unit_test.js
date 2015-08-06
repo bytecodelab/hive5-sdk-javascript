@@ -1,6 +1,8 @@
 /**
  * Created by gilboklee on 15. 7. 27..
  */
+
+
 this.Config = {
   host: "http://alpha.hornet.hive5.io",
   appKey: "d8444735-15e3-4198-9179-102ba68776fc",
@@ -28,6 +30,16 @@ QUnit.test("initialize test", function (assert) {
 /*
  * Auth
  */
+function loginTest() {
+  defaultInitialize();
+  var os = "ios";
+  var build = "1.0.0";
+  var locale = "en-US";
+  var platform = "";
+  var id = "";
+  return Hive5.Auth.login(os, build, locale, platform, id);
+}
+
 QUnit.test("Auth.login[anonymous] test", function (assert) {
   defaultInitialize();
   var done = assert.async();
@@ -89,6 +101,40 @@ QUnit.test("Settings.checkNicknameAvailability test", function (assert) {
   });
 });
 
+QUnit.test("Settings.setNickname test", function (assert) {
+  var done = assert.async();
+
+  loginTest().then(function (loginResponse) {
+    var jsonData = JSON.parse(loginResponse.raw);
+    var nickname = "nickname_" + jsonData.user.id;
+    console.log(nickname);
+
+    var p = Hive5.Settings.setNickname(nickname);
+    p.then(function (response) {
+      console.log(response.raw);
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      done();
+
+      // nickname 설정 여부 확인
+      var p = Hive5.Settings.checkNicknameAvailability(nickname);
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        assert.equal(jsonData.available, false, "Passed!");
+        //done();
+      }).catch(function () {
+        assert.ok(false, "fails");
+        //done();
+      });
+
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
 /*
  * Leaderboard
  */
@@ -104,7 +150,6 @@ QUnit.test("Leaderboard.submitScore test", function (assert) {
   initTest().then(function () {
     var p = Hive5.Leaderboard.submitScore(leaderboardKey, score, extras);
     p.then(function (response) {
-      console.log(response.raw);
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       assert.equal(jsonData.hasOwnProperty("updated_at"), true, "Passed!");
