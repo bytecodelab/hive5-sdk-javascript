@@ -221,14 +221,14 @@ QUnit.test("Leaderboard.getSocialScores test", function (assert) {
 QUnit.test("Script.runScript test", function (assert) {
   var done = assert.async();
 
-  var scriptParams = {echo: "hello"};
+  var echoStr = "hello, world";
 
   initTest().then(function () {
-    var p = Hive5.Script.runScript("echo", scriptParams);
+    var p = Hive5.Script.runScript("echo", {echo: echoStr});
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.equal(jsonData.call_return, "hello", "Passed!");
+      assert.equal(jsonData.call_return, echoStr, "Passed!");
       done();
     }).catch(function () {
       assert.ok(false, "fails");
