@@ -289,7 +289,7 @@
     },
 
     /**
-     * 닉네임 설정
+     * 닉네임을 설정한다.
      * @memberOf Hive5.Settings
      * @param {string} nickname Nickname
      * @return {Hive5.Promise}
@@ -319,7 +319,7 @@
   Hive5.Leaderboard = {
 
     /**
-     * 리더보드에 점수를 제출한다
+     * 리더보드에 점수를 제출한다. 기존 등록 점수보다 높으면 결과중 updated_at에 시간이 기록되며, 그렇지 않을 경우 null로 리턴된다.
      * @memberOf Hive5.Leaderboard
      * @param {string} leaderboardKey Leaderboard Key
      * @param {number} score 점수
@@ -432,15 +432,14 @@
   Hive5.Script = {
 
     /**
-     * Run script with paramters in a Hive5.Settings.
-     * On success, return result of running script in cloud.
+     * 스크립트를 실행한다. 성공시 스크립트 실행결과를 리턴받는다.
      * <code>current</code>.
      *
      * <p>description</p>
      *
      * @memberOf Hive5.Script
-     * @param {string} scriptName - Name of a Script
-     * @param {object} [scriptParams] - Paramters for a Script (JSON)
+     * @param {string} scriptName - 스크립트 이름
+     * @param {object} [scriptParams] - 스크립트 실행에 넘길 parameter
      * @return {Hive5.Promise} A promise that is fulfilled with the result when
      *     running script is complete.
      */
