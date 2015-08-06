@@ -420,6 +420,59 @@
 
 }(this));
 
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * Push
+   * @namespace Hive5.Push
+   * @memberOf Hive5
+   */
+  Hive5.Push = {
+
+    /**
+     * Push 토큰을 등록 또는 업데이트한다.
+     * @memberOf Hive5.Push
+     * @param {string} platform Push platform으로 "gcm" 또는 "apns"를 지정한다.
+     * @param {string} token Push token
+     */
+    updatePushToken: function (platform, token) {
+
+      var data = {
+        push_platform: platform,
+        push_token: token
+      };
+
+      var options = {
+        method: "POST",
+        route: "pushes/register",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * Push 수신을 활성화하거나 비활성화한다.
+     * @memberOf Hive5.Leaderboard
+     * @param {boolean} activeFlag Push 수신여부
+     * @return {Hive5.Promise}
+     */
+    activate: function (activeFlag) {
+
+      var options = {
+        method: "POST",
+        route: "pushes/activate/" + activeFlag
+      };
+
+      return Hive5._request(options);
+    }
+  };
+
+}(this));
+
 (function(root) {
   root.Hive5 = root.Hive5 || {};
   var Hive5 = root.Hive5;

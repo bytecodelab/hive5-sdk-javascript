@@ -107,11 +107,9 @@ QUnit.test("Settings.setNickname test", function (assert) {
   loginTest().then(function (loginResponse) {
     var jsonData = JSON.parse(loginResponse.raw);
     var nickname = "nickname_" + jsonData.user.id;
-    console.log(nickname);
 
     var p = Hive5.Settings.setNickname(nickname);
     p.then(function (response) {
-      console.log(response.raw);
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       done();
@@ -207,6 +205,41 @@ QUnit.test("Leaderboard.getSocialScores test", function (assert) {
       assert.equal(jsonData.result_code, 0, "Passed!");
       assert.equal(Array.isArray(jsonData.scores), true, "Passed!");
       assert.ok(jsonData.scores.length >= 1, "Passed!");
+      done();
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+/*
+ * Push
+ */
+QUnit.test("Push.updatePushToken test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Push.updatePushToken("gcm", "test_token");
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      done();
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Push.active test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Push.activate(false);
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
       done();
     }).catch(function () {
       assert.ok(false, "fails");
