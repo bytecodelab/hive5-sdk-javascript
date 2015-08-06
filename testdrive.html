@@ -156,6 +156,114 @@
 
       <!--
       *
+      * Hive5.Leaderboard
+      *
+      -->
+      <div class="row">
+        <div class="col-lg-12">
+          <a name="Hive5.Leaderboard"></a>
+
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">Hive5.Leaderboard</h3>
+            </div>
+            <div class="panel-body">
+
+              <!-- Hive5.Leaderboard.submitScores -->
+              <div class="col-lg-6">
+                <a class="anchor" name="Hive5.Leaderboard.submitScores"></a>
+
+                <div class="panel panel-default" id="leaderboard-submitscore">
+                  <div class="panel-heading">Hive5.Leaderboard.submitScores</div>
+                  <div class="panel-body">
+                    <div class="form-group">
+                      <input class="form-control score" placeholder="Score"/>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control extras" placeholder="Extras"/>
+                    </div>
+                    <div class="form-group">
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="output well"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hive5.Leaderboard.submitScores end -->
+
+              <!-- Hive5.Leaderboard.getMyScore -->
+              <div class="col-lg-6">
+                <a class="anchor" name="Hive5.Leaderboard.getMyScore"></a>
+
+                <div class="panel panel-default" id="leaderboard-getmyscore">
+                  <div class="panel-heading">Hive5.Leaderboard.getMyScore</div>
+                  <div class="panel-body">
+                    <div class="form-group">
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="output well"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hive5.Leaderboard.getMyScore end -->
+
+              <!-- Hive5.Leaderboard.getScores -->
+              <div class="col-lg-6">
+                <a class="anchor" name="Hive5.Leaderboard.getScores"></a>
+
+                <div class="panel panel-default" id="leaderboard-getscores">
+                  <div class="panel-heading">Hive5.Leaderboard.getScores</div>
+                  <div class="panel-body">
+                    <div class="form-group">
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="output well"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hive5.Leaderboard.getScores end -->
+
+              <!-- Hive5.Leaderboard.getSocialScores -->
+              <div class="col-lg-6">
+                <a class="anchor" name="Hive5.Leaderboard.getSocialScores"></a>
+
+                <div class="panel panel-default" id="leaderboard-getsocialscores">
+                  <div class="panel-heading">Hive5.Leaderboard.getsocialscores</div>
+                  <div class="panel-body">
+                    <div class="form-group">
+                      <button class="form-control btn btn-sm btn-primary submit">
+                        <span class="glyphicon glyphicon-ice-lolly-tasted"></span> Run
+                      </button>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="output well"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hive5.Leaderboard.getSocialScores end -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Hive5.Leaderboard end -->
+
+
+      <!--
+      *
       * Hive5.Settings
       *
       -->
@@ -346,6 +454,62 @@
           outputLog(logPlace, response.raw);
 
           clearUserInfo();
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      /*
+       *
+       * Leaderboard
+       *
+       */
+      $('#leaderboard-submitscore .submit').on("click", function () {
+        var logPlace = '#leaderboard-submitscore .output';
+
+        if (!$('#leaderboard-submitscore .score').val()) {
+          alert("score cannot be null!");
+          $('#leaderboard-submitscore .score').focus();
+          return;
+        }
+
+        var p = Hive5.Leaderboard.submitScore("leader1", JSON.parse($('#leaderboard-submitscore .score').val()),
+          JSON.parse($('#leaderboard-submitscore .extras').val()));
+        p.then(function (response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      $('#leaderboard-getmyscore .submit').on("click", function () {
+        var logPlace = '#leaderboard-getmyscore .output';
+
+        var p = Hive5.Leaderboard.getMyScore("leader1");
+        p.then(function (response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      $('#leaderboard-getscores .submit').on("click", function () {
+        var logPlace = '#leaderboard-getscores .output';
+
+        var p = Hive5.Leaderboard.getScores("leader1", 1, 10, ["user", "hero"]);
+        p.then(function (response) {
+          outputLog(logPlace, response.raw);
+        }).catch(function (response) {
+          outputLog(logPlace, response.raw);
+        });
+      });
+
+      $('#leaderboard-getsocialscores .submit').on("click", function () {
+        var logPlace = '#leaderboard-getsocialscores .output';
+
+        var p = Hive5.Leaderboard.getSocialScores("leader1", ["user", "hero"]);
+        p.then(function (response) {
+          outputLog(logPlace, response.raw);
         }).catch(function (response) {
           outputLog(logPlace, response.raw);
         });

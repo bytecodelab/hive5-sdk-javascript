@@ -79,11 +79,22 @@
     url += route;
 
     if (method === "GET") {
-      url += "?" + data;
+      if (options.hasOwnProperty("data")) {
+        url += "?" + Object.keys(data).filter(function (key) {
+          return typeof data[key] != "undefined";
+        }).map(function (key) {
+          if (Array.isArray(data[key]))
+            return data[key].map(function(value) {return key + "=" + value}).join("&");
+          else
+            return key + "=" + data[key];
+        }).join("&");
+      }
       data = "";
     } else {
       //data = JSON.stringify(data);
     }
+
+    console.log(url);
 
     var request = {
       url: url,
@@ -280,6 +291,119 @@
       return Hive5._request(options);
     }
   };
+}(this));
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * 리더보드
+   * @namespace Hive5.Leaderboard
+   * @memberOf Hive5
+   */
+  Hive5.Leaderboard = {
+
+    /**
+     * 리더보드에 점수를 제출한다
+     * @memberOf Hive5.Leaderboard
+     * @param {string} [leaderboardKey] Leaderboard Key
+     * @param {number} [score] 점수
+     * @param {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
+     */
+    submitScore: function (leaderboardKey, score, extras) {
+
+      var data = {
+        score: score,
+        extras: extras
+      };
+
+      var options = {
+        method: "POST",
+        route: "leaderboards/" + leaderboardKey + "/scores",
+        data: JSON.stringify(data)
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 리더보드의 내 점수와 관련된 정보를 가져온다
+     * @memberOf Hive5.Leaderboard
+     * @param {string} leaderboardKey Leaderboard Key
+     * @param {number} [rangeMin] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최소값
+     * @param {number} [rangeMax] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최대값
+     * @return {Hive5.Promise}
+     */
+    getMyScore: function (leaderboardKey, rangeMin, rangeMax) {
+
+      var data = {
+        range_min: rangeMin,
+        range_max: rangeMax
+      };
+
+      var options = {
+        method: "GET",
+        route: "leaderboards/" + leaderboardKey + "/my_score",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 리더보드에서 순위 목록을 가져온다.
+     * @memberOf Hive5.Leaderboard
+     * @param {string} leaderboardKey Leaderboard Key
+     * @param {number} rankMin 랭킹의 범위 최소값
+     * @param {number} rankMax 랭킹의 범위 최대값
+     * @param {array} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
+     * @param {number} [rangeMin] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최소값
+     * @param {number} [rangeMax] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최대값
+     * @return {Hive5.Promise}
+     */
+    getScores: function (leaderboardKey, rankMin, rankMax, objectKeys, rangeMin, rangeMax) {
+
+      var data = {
+        object_class: objectKeys,
+        rank_min: rankMin,
+        rank_max: rankMax,
+        range_min: rangeMin,
+        range_max: rangeMax
+      };
+
+      var options = {
+        method: "GET",
+        route: "leaderboards/" + leaderboardKey + "/scores",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 리더보드에서 친구들의 순위 목록을 가져온다.
+     * @memberOf Hive5.Leaderboard
+     * @param {string} leaderboardKey Leaderboard Key
+     * @param {array} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
+     * @return {Hive5.Promise}
+     */
+    getSocialScores: function (leaderboardKey, objectKeys) {
+
+      var data = {
+        object_class: objectKeys
+      };
+
+      var options = {
+        method: "GET",
+        route: "leaderboards/" + leaderboardKey + "/social_scores",
+        data: data
+      };
+
+      return Hive5._request(options);
+    }
+  };
+
 }(this));
 
 (function(root) {
