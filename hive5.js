@@ -423,7 +423,7 @@
      *
      * @memberOf Hive5.Script
      * @param {string} scriptName - Name of a Script
-     * @param {string} [scriptParams] - Paramters for a Script (JSON)
+     * @param {object} [scriptParams] - Paramters for a Script (JSON)
      * @return {Hive5.Promise} A promise that is fulfilled with the result when
      *     running script is complete.
      */
