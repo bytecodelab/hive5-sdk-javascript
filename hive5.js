@@ -567,26 +567,6 @@
       };
 
       return Hive5._request(options);
-    },
-
-    /**
-     * 친구 목록을 가져온다
-     * @memberOf Hive5.SocialGraph
-     * @param {string} groupName 대상 그룹명
-     */
-    listFriends: function (groupName) {
-
-      var data = {
-        group: groupName
-      };
-
-      var options = {
-        method: "GET",
-        route: "friends",
-        data: data
-      };
-
-      return Hive5._request(options);
     }
   };
 
