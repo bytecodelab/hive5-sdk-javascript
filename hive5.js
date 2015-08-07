@@ -342,7 +342,7 @@
     },
 
     /**
-     * 리더보드의 내 점수와 관련된 정보를 가져온다
+     * 리더보드의 내 점수와 관련된 정보를 가져온다.
      * @memberOf Hive5.Leaderboard
      * @param {string} leaderboardKey Leaderboard Key
      * @param {number} [rangeMin] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최소값
@@ -371,7 +371,7 @@
      * @param {string} leaderboardKey Leaderboard Key
      * @param {number} rankMin 랭킹의 범위 최소값
      * @param {number} rankMax 랭킹의 범위 최대값
-     * @param {array} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
+     * @param {string[]} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
      * @param {number} [rangeMin] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최소값
      * @param {number} [rangeMax] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최대값
      * @return {Hive5.Promise}
@@ -399,7 +399,7 @@
      * 리더보드에서 친구들의 순위 목록을 가져온다.
      * @memberOf Hive5.Leaderboard
      * @param {string} leaderboardKey Leaderboard Key
-     * @param {array} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
+     * @param {string[]} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
      * @return {Hive5.Promise}
      */
     getSocialScores: function (leaderboardKey, objectKeys) {
@@ -455,7 +455,7 @@
 
     /**
      * Push 수신을 활성화하거나 비활성화한다.
-     * @memberOf Hive5.Leaderboard
+     * @memberOf Hive5.Push
      * @param {boolean} activeFlag Push 수신여부
      * @return {Hive5.Promise}
      */
@@ -484,10 +484,12 @@
   Hive5.SocialGraph = {
 
     /**
-     * 친구를 등록한다
+     * 친구를 등록한다.
      * @memberOf Hive5.SocialGraph
      * @param {string} groupName 등록할 그룹명
-     * @param {array} friends 등록할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {Object[]} friends 등록할 친구의 array
+     * @param {string} friends[].platform 친구의 social platform
+     * @param {string} friends[].id 친구의 user id
      */
     addFriends: function (groupName, friends) {
 
@@ -506,10 +508,12 @@
     },
 
     /**
-     * 친구를 삭제한다
+     * 친구를 삭제한다.
      * @memberOf Hive5.SocialGraph
      * @param {string} groupName 대상 그룹명
-     * @param {array} friends 삭제할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {Object[]} friends 삭제할 친구의 array
+     * @param {string} friends[].platform 친구의 social platform
+     * @param {string} friends[].id 친구의 user id
      */
     removeFriends: function (groupName, friends) {
 
@@ -528,10 +532,12 @@
     },
 
     /**
-     * 친구목록을 업데이트한다
+     * 친구목록을 업데이트한다.
      * @memberOf Hive5.SocialGraph
      * @param {string} groupName 업데이트 대상 그룹명
-     * @param {array} friends 새로 업데이트할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {array} friends 새로 업데이트할 친구의 array
+     * @param {string} friends[].platform 친구의 social platform
+     * @param {string} friends[].id 친구의 user id
      */
     updateFriends: function (groupName, friends) {
 
@@ -550,7 +556,7 @@
     },
 
     /**
-     * 친구 목록을 가져온다
+     * 친구 목록을 가져온다.
      * @memberOf Hive5.SocialGraph
      * @param {string} groupName 대상 그룹명
      */
@@ -584,10 +590,12 @@
   Hive5.Purchase = {
 
     /**
-     * 구글 결제를 시작한다
+     * 구글 결제를 시작한다.
      * @memberOf Hive5.Purchase
      * @param {string} productCode 상품 코드
-     * @param {string} [receiver] 선물 받을 사용자로 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
+     * @param {string} receiver.platform 사용자의 social platform
+     * @param {string} receiver.id 사용자의 user id
      * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createGooglePurchase: function (productCode, receiver, mailForReceiver) {
@@ -608,10 +616,10 @@
     },
 
     /**
-     * 구글 결제를 완료 처리한다
+     * 구글 결제를 완료 처리한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {object} params 구매 완료 script에 전달할 params
+     * @param {Object} params 구매 완료 script에 전달할 params
      * @param {number} listPrice 원래 상품의 가격
      * @param {number} purchasedPrice 실제 구매한 가격
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
@@ -638,11 +646,6 @@
       return Hive5._request(options);
     },
 
-    /**
-     * 구글 구매 상태를 확인한다
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     */
     _getPurchaseStatus: function (platform, id) {
       var options = {
         method: "GET",
@@ -651,15 +654,23 @@
 
       return Hive5._request(options);
     },
+
+    /**
+     * 구글 구매 상태를 확인한다.
+     * @memberOf Hive5.Purchase
+     * @param {string} id 구매 시작때 발급받은 구매 id
+     */
     getGooglePurchaseStatus: function (id) {
       return this._getPurchaseStatus("google", id);
     },
 
     /**
-     * 애플 결제를 시작한다
+     * 애플 결제를 시작한다.
      * @memberOf Hive5.Purchase
      * @param {string} productCode 상품 코드
-     * @param {string} [receiver] 선물 받을 사용자로 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
+     * @param {string} receiver.platform 사용자의 social platform
+     * @param {string} receiver.id 사용자의 user id
      * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createApplePurchase: function (productCode, receiver, mailForReceiver) {
@@ -680,10 +691,10 @@
     },
 
     /**
-     * 애플 결제를 완료 처리한다
+     * 애플 결제를 완료 처리한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {object} params 구매 완료 script에 전달할 params
+     * @param {Object} params 구매 완료 script에 전달할 params
      * @param {number} listPrice 원래 상품의 가격
      * @param {number} purchasedPrice 실제 구매한 가격
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
@@ -711,7 +722,7 @@
     },
 
     /**
-     * 애플 구매 상태를 확인한다
+     * 애플 구매 상태를 확인한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
      */
@@ -720,11 +731,13 @@
     },
 
     /**
-     * 네이버 결제를 시작한다
+     * 네이버 결제를 시작한다.
      * @memberOf Hive5.Purchase
      * @param {string} productCode 네이버에 등록된 상품의 code
      * @param {string} paymentSequence 네이버 결제 완료후 전달받은 paymentSeq 값
-     * @param {string} [receiver] 선물 받을 사용자로 {platform:<platform>, id:<user id} 형태로 표현된다.
+     * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
+     * @param {string} receiver.platform 사용자의 social platform
+     * @param {string} receiver.id 사용자의 user id
      * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createNaverPurchase: function (productCode, paymentSequence, receiver, mailForReceiver) {
@@ -746,10 +759,10 @@
     },
 
     /**
-     * 네이버 결제를 완료 처리한다
+     * 네이버 결제를 완료 처리한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {object} params 구매 완료 script에 전달할 params
+     * @param {Object} params 구매 완료 script에 전달할 params
      * @param {number} listPrice 원래 상품의 가격
      * @param {number} purchasedPrice 실제 구매한 가격
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
@@ -773,7 +786,7 @@
     },
 
     /**
-     * 네이버 구매 상태를 확인한다
+     * 네이버 구매 상태를 확인한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
      */
@@ -798,13 +811,9 @@
 
     /**
      * 스크립트를 실행한다. 성공시 스크립트 실행결과를 리턴받는다.
-     * <code>current</code>.
-     *
-     * <p>description</p>
-     *
      * @memberOf Hive5.Script
      * @param {string} scriptName - 스크립트 이름
-     * @param {object} [scriptParams] - 스크립트 실행에 넘길 parameter
+     * @param {Object} [scriptParams] - 스크립트 실행에 넘길 parameter
      * @return {Hive5.Promise} A promise that is fulfilled with the result when
      *     running script is complete.
      */

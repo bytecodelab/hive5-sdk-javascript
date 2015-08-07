@@ -347,7 +347,7 @@ QUnit.test("Purchase.createGooglePurchase test", function (assert) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       assert.ok(jsonData.id > 0, "Passed!"); //!! id는 향수 string이 됨.
-      
+
       var p = Hive5.Purchase.getGooglePurchaseStatus(jsonData.id);
       p.then(function (response) {
 
