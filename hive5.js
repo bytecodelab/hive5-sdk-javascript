@@ -420,7 +420,6 @@
 
 }(this));
 
-
 (function (root) {
   root.Hive5 = root.Hive5 || {};
   var Hive5 = root.Hive5;
@@ -465,6 +464,126 @@
       var options = {
         method: "POST",
         route: "pushes/activate/" + activeFlag
+      };
+
+      return Hive5._request(options);
+    }
+  };
+
+}(this));
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * SocialGraph
+   * @namespace Hive5.SocialGraph
+   * @memberOf Hive5
+   */
+  Hive5.SocialGraph = {
+
+    /**
+     * 친구를 등록한다
+     * @memberOf Hive5.SocialGraph
+     * @param {string} groupName 등록할 그룹명
+     * @param {array} friends 등록할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     */
+    addFriends: function (groupName, friends) {
+
+      var data = {
+        group: groupName,
+        friends: friends
+      };
+
+      var options = {
+        method: "POST",
+        route: "friends/add",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 친구를 삭제한다
+     * @memberOf Hive5.SocialGraph
+     * @param {string} groupName 대상 그룹명
+     * @param {array} friends 삭제할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     */
+    removeFriends: function (groupName, friends) {
+
+      var data = {
+        group: groupName,
+        friends: friends
+      };
+
+      var options = {
+        method: "POST",
+        route: "friends/remove",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 친구목록을 업데이트한다
+     * @memberOf Hive5.SocialGraph
+     * @param {string} groupName 업데이트 대상 그룹명
+     * @param {array} friends 새로 업데이트할 친구의 array. 친구는 {platform:<platform>, id:<user id} 형태로 표현된다.
+     */
+    updateFriends: function (groupName, friends) {
+
+      var data = {
+        group: groupName,
+        friends: friends
+      };
+
+      var options = {
+        method: "POST",
+        route: "friends/update",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 친구 목록을 가져온다
+     * @memberOf Hive5.SocialGraph
+     * @param {string} groupName 대상 그룹명
+     */
+    listFriends: function (groupName) {
+
+      var data = {
+        group: groupName
+      };
+
+      var options = {
+        method: "GET",
+        route: "friends",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 친구 목록을 가져온다
+     * @memberOf Hive5.SocialGraph
+     * @param {string} groupName 대상 그룹명
+     */
+    listFriends: function (groupName) {
+
+      var data = {
+        group: groupName
+      };
+
+      var options = {
+        method: "GET",
+        route: "friends",
+        data: data
       };
 
       return Hive5._request(options);
