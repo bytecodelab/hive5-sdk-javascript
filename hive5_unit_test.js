@@ -346,7 +346,7 @@ QUnit.test("Purchase.createGooglePurchase test", function (assert) {
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.ok(jsonData.id > 0, "Passed!"); //!! id는 향수 string이 됨.
+      assert.ok(jsonData.id.length > 0, "Passed!");
 
       var p = Hive5.Purchase.getGooglePurchaseStatus(jsonData.id);
       p.then(function (response) {
@@ -398,7 +398,7 @@ QUnit.test("Purchase.createApplePurchase test", function (assert) {
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.ok(jsonData.id > 0, "Passed!"); //!! id는 향수 string이 됨.
+      assert.ok(jsonData.id.length > 0, "Passed!");
 
       var p = Hive5.Purchase.getApplePurchaseStatus(jsonData.id);
       p.then(function (response) {
@@ -424,7 +424,7 @@ QUnit.test("Purchase.createNaverPurchase test", function (assert) {
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.ok(jsonData.id > 0, "Passed!"); //!! id는 향수 string이 됨.
+      assert.ok(jsonData.id.length > 0, "Passed!");
 
       var p = Hive5.Purchase.getNaverPurchaseStatus(jsonData.id);
       p.then(function (response) {
