@@ -323,7 +323,7 @@
      * @memberOf Hive5.Leaderboard
      * @param {string} leaderboardKey Leaderboard Key
      * @param {number} score 점수
-     * @param {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
+     * @param {*} [extras=null] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
      */
     submitScore: function (leaderboardKey, score, extras) {
 
@@ -699,7 +699,7 @@
      * @param {number} purchasedPrice 실제 구매한 가격
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
      * @param {string} receipt Apple 결제 후 받은 'receipt'. Base 64 Encoding이 필요함
-     * @param {boolean} [isSandbox] receipt가 apple의 sandbox용 일 경우에 true. default false
+     * @param {boolean} [isSandbox=false] receipt가 apple의 sandbox용 일 경우에 true. 그렇지 않으면 false
      */
     completeApplePurchase: function (id, params, listPrice, purchasedPrice, currency, receipt, isSandbox) {
 
