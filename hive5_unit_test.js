@@ -27,13 +27,10 @@ QUnit.test("initialize test", function (assert) {
   assert.equal(Hive5._uuid, Config.uuid, "Passed!");
 });
 
-var test;
-
 /*
  * Auth
  */
-
-test = QUnit.test("Auth.login[anonymous] test", function (assert) {
+QUnit.test("Auth.login[anonymous] test", function (assert) {
   defaultInitialize();
   var done = assert.async();
 
