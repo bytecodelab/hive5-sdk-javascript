@@ -274,16 +274,18 @@
     /**
      * 약관 동의를 처리한다.
      * @memberOf Hive5.Auth
-     * @param {string} generalVersion 약관 버전
-     * @param {string} partnershipVersion 파트너쉽 버전
+     * @param {string} agreementName 약관의 이름이나 버전
+     * @param {string} agreementValue 약관에 동의한 내용
      * @return {Hive5.Promise}
      */
-    submitAgreements: function (generalVersion, partnershipVersion) {
+    submitAgreements: function (agreementName, agreementValue) {
+      var agreement = {};
+      agreement[agreementName] = agreementValue;
 
       var options = {
         method: "POST",
         route: "agreements",
-        data : {general_agreement: generalVersion, test_ver: partnershipVersion}
+        data : agreement
       };
 
       return Hive5._request(options);

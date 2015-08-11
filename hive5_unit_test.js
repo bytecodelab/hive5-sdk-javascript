@@ -30,15 +30,6 @@ QUnit.test("initialize test", function (assert) {
 /*
  * Auth
  */
-function loginTest() {
-  defaultInitialize();
-  var os = "ios";
-  var build = "1.0.0";
-  var locale = "en-US";
-  var platform = "";
-  var id = "";
-  return Hive5.Auth.login(os, build, locale, platform, id);
-}
 
 QUnit.test("Auth.login[anonymous] test", function (assert) {
   defaultInitialize();
@@ -47,10 +38,8 @@ QUnit.test("Auth.login[anonymous] test", function (assert) {
   var os = "ios";
   var build = "1.0.0";
   var locale = "en-US";
-  var platform = "";
-  var id = "";
 
-  var p = Hive5.Auth.login(os, build, locale, platform, id);
+  var p = Hive5.Auth.login(os, build, locale);
   p.then(function (response) {
     console.log(response.raw)
     var jsonData = JSON.parse(response.raw);
@@ -85,8 +74,9 @@ QUnit.test("Auth.delete test", function (assert) {
 QUnit.test("Auth.switchPlatform test", function (assert) {
   var done = assert.async();
 
-  initTest().then(function () {
-    var p = Hive5.Auth.switchPlatform({platform:"kakao", id:"999999"});
+  initTest().then(function (loginResponse) {
+    var json = JSON.parse(loginResponse.raw);
+    var p = Hive5.Auth.switchPlatform({platform:"kakao", id:"kakao_"+json.user.id});
     p.then(function (response) {
 
       console.log(response.raw);
@@ -105,7 +95,7 @@ QUnit.test("Auth.agreements test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Auth.submitAgreements("1.0", "2.0b");
+    var p = Hive5.Auth.submitAgreements("agreementVersion", "2.0b");
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
@@ -114,8 +104,7 @@ QUnit.test("Auth.agreements test", function (assert) {
       p.then(function (response) {
         var jsonData = JSON.parse(response.raw);
         assert.equal(jsonData.result_code, 0, "Passed!");
-        assert.equal(jsonData.agreements.general_agreement.version, "1.0", "Passed!");
-        assert.equal(jsonData.agreements.partnership_agreement.version, "2.0b", "Passed!");
+        assert.equal(jsonData.agreements.agreementVersion.version, "2.0b", "Passed!");
         done();
       }).catch(function () {
         assert.ok(false, "fails");
@@ -152,7 +141,7 @@ QUnit.test("Settings.checkNicknameAvailability test", function (assert) {
 QUnit.test("Settings.setNickname test", function (assert) {
   var done = assert.async();
 
-  loginTest().then(function (loginResponse) {
+  initTest().then(function (loginResponse) {
     var jsonData = JSON.parse(loginResponse.raw);
     var nickname = "nickname_" + jsonData.user.id;
 
