@@ -52,6 +52,7 @@ QUnit.test("Auth.login[anonymous] test", function (assert) {
 
   var p = Hive5.Auth.login(os, build, locale, platform, id);
   p.then(function (response) {
+    console.log(response.raw)
     var jsonData = JSON.parse(response.raw);
     assert.equal(jsonData.result_code, 0, "Passed!");
     assert.ok(jsonData.access_token.length > 0, "Passed!");
@@ -74,6 +75,53 @@ QUnit.test("Auth.delete test", function (assert) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       done();
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Auth.switchPlatform test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Auth.switchPlatform({platform:"kakao", id:"999999"});
+    p.then(function (response) {
+
+      console.log(response.raw);
+
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      done();
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Auth.agreements test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Auth.submitAgreements("1.0", "2.0b");
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+
+      var p = Hive5.Auth.getAgreements();
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        assert.equal(jsonData.agreements.general_agreement.version, "1.0", "Passed!");
+        assert.equal(jsonData.agreements.partnership_agreement.version, "2.0b", "Passed!");
+        done();
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+
     }).catch(function () {
       assert.ok(false, "fails");
       done();

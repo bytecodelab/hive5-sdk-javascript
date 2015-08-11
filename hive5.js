@@ -217,15 +217,15 @@
 
       var p = new Promise(function(resolve, reject) {
         Hive5._request(options).then(
-            function(response) {
-              var jsonData = JSON.parse(response.raw);
+          function(response) {
+            var jsonData = JSON.parse(response.raw);
 
-              Hive5._accessToken = jsonData.access_token;
-              Hive5._sessionKey = jsonData.session_key;
-              Hive5._user = jsonData.user;
+            Hive5._accessToken = jsonData.access_token;
+            Hive5._sessionKey = jsonData.session_key;
+            Hive5._user = jsonData.user;
 
-              resolve(response);
-             }
+            resolve(response);
+           }
         );
       });
 
@@ -244,12 +244,64 @@
      *
      */
     delete: function () {
-        var options = {
-          method: "POST",
-          route: "auth/delete"
-        };
+      var options = {
+        method: "POST",
+        route: "auth/delete"
+      };
 
-        return Hive5._request(options);
+      return Hive5._request(options);
+    },
+
+    /**
+     * 플레이어와 연동된 Social Platform을 변동한다.
+     * @memberOf Hive5.Auth
+     * @param {Object} user 변경할 user 정보
+     * @param {string} user.platform social platform
+     * @param {string} user.id user id
+     * @return {Hive5.Promise}
+     */
+    switchPlatform: function (user) {
+
+      var options = {
+        method: "POST",
+        route: "auth/switch",
+        data : {user: user}
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 약관 동의를 처리한다.
+     * @memberOf Hive5.Auth
+     * @param {string} generalVersion 약관 버전
+     * @param {string} partnershipVersion 파트너쉽 버전
+     * @return {Hive5.Promise}
+     */
+    submitAgreements: function (generalVersion, partnershipVersion) {
+
+      var options = {
+        method: "POST",
+        route: "agreements",
+        data : {general_agreement: generalVersion, test_ver: partnershipVersion}
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 약관 동의 기록을 조회한다.
+     * @memberOf Hive5.Auth
+     * @return {Hive5.Promise}
+     */
+    getAgreements: function () {
+
+      var options = {
+        method: "GET",
+        route: "agreements"
+      };
+
+      return Hive5._request(options);
     }
   };
 
