@@ -200,13 +200,7 @@
       };
 
       if (platform && id) {
-        data.user = {};
-        if (platform) {
-          data.user.platform = platform;
-        }
-        if (id) {
-          data.user.id = id;
-        }
+        data.user = {platform:platform, id:id}
       }
 
       var options = {
