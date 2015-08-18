@@ -870,7 +870,7 @@
       var options = {
         method: "POST",
         route: "scripts/run/" + scriptName,
-        data: scriptParams
+        data: {params:scriptParams}
       };
 
       return Hive5._request(options);
