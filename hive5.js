@@ -179,6 +179,19 @@
   Hive5.Auth = {
 
     /**
+     * @typedef {Object} LoginResult
+     * @property {integer} result_code 결과코드. Error code 참고.
+     * @property {string} [result_message] 결과메시지. 실패한 경우에 메시지 있을 수 있음.
+     * @property {string} access_token 로그인한 사용자를 위한 access token.
+     * @property {string} session_key 로그인한 사용자를 위한 session key.
+     * @property {Object} user 사용자.
+     *  @property {string} user.platform 로그인한 사용자의 플랫폼.
+     *  @property {string} user.id 로그인한 사용자의 unique한 고유 Id, platform이 'anonymous'인 경우 hive5에서 id를 발급한다.
+     * @property {integer} new_mail_count 지난 로그인 이후 도착한 메일 수
+     * @property {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
+     */
+
+    /**
      * Logs in a Hive5.Auth. On success, this saves the session to localStorage,
      * so you can retrieve the currently logged in user using
      * <code>current</code>.
@@ -189,7 +202,7 @@
      * @param {string} [locale] Locale (ex, ko-KR)
      * @param {string} [platform] Authentication platform (ex, facebook, kakao)
      * @param {string} [id] User Id dedicated to platform
-     * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
+     * @return {Hive5.Promise.<LoginResult>} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
     login: function (os, build, locale, platform, id) {
