@@ -179,6 +179,19 @@
   Hive5.Auth = {
 
     /**
+     * @typedef {Object} LoginResult
+     * @property {integer} result_code 결과코드. Error code 참고.
+     * @property {string} [result_message] 결과메시지. 실패한 경우에 메시지 있을 수 있음.
+     * @property {string} access_token 로그인한 사용자를 위한 access token.
+     * @property {string} session_key 로그인한 사용자를 위한 session key.
+     * @property {Object} user 사용자.
+     *  @property {string} user.platform 로그인한 사용자의 플랫폼.
+     *  @property {string} user.id 로그인한 사용자의 unique한 고유 Id, platform이 'anonymous'인 경우 hive5에서 id를 발급한다.
+     * @property {integer} new_mail_count 지난 로그인 이후 도착한 메일 수
+     * @property {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
+     */
+
+    /**
      * Logs in a Hive5.Auth. On success, this saves the session to localStorage,
      * so you can retrieve the currently logged in user using
      * <code>current</code>.
@@ -189,7 +202,7 @@
      * @param {string} [locale] Locale (ex, ko-KR)
      * @param {string} [platform] Authentication platform (ex, facebook, kakao)
      * @param {string} [id] User Id dedicated to platform
-     * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
+     * @return {Hive5.Promise.<LoginResult>} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
     login: function (os, build, locale, platform, id) {
@@ -1088,7 +1101,7 @@
   };
 }(this));
 
-(function (root) {
+(function(root) {
   root.Hive5 = root.Hive5 || {};
   var Hive5 = root.Hive5;
 
@@ -1180,7 +1193,7 @@
 
       var options = {
         method: "GET",
-        route: "forums/"+ key + "/threads",
+        route: "forums/" + key + "/threads",
         data: data
       };
 
@@ -1196,7 +1209,7 @@
 
       var options = {
         method: "GET",
-        route: "forums/"+ key + "/threads/count",
+        route: "forums/" + key + "/threads/count",
         data: data
       };
 
@@ -1222,7 +1235,7 @@
 
       var options = {
         method: "POST",
-        route: "forums/"+ key + "/threads",
+        route: "forums/" + key + "/threads",
         data: data
       };
 
@@ -1249,7 +1262,7 @@
 
       var options = {
         method: "POST",
-        route: "forums/"+ key + "/threads/update/" + id,
+        route: "forums/" + key + "/threads/update/" + id,
         data: data
       };
 
@@ -1266,11 +1279,144 @@
 
       var options = {
         method: "POST",
-        route: "forums/"+ key + "/threads/delete/" + id
+        route: "forums/" + key + "/threads/delete/" + id
       }
 
       return Hive5._request(options);
     }
   };
+}(this));
 
+
+(function(root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * Representation of error codes.
+   * @enum {number}
+   * @readonly
+   * @memberOf Hive5
+   */
+  Hive5.ErrorCode = {
+    /** Success */
+    SUCCESS: 0,
+
+    /** Invalid parameter */
+    INVALID_PARAM: 1001,
+    /** Data dose not exist */
+    DATA_DOES_NOT_EXIST: 1002,
+
+    /** Invalid reward */
+    INVALID_REWARD: 2101,
+    /** The reward was already applied */
+    ALREADY_APPLIED__REWARD: 2102,
+
+    /** Invalid purchase status */
+    INVALID_PURCHASE_STATUS: 2201,
+    /** Invalid payment sequence */
+    INVALID_PAYMENT_SEQUENCE: 2202,
+    /** Invalid apple receipt */
+    INVALID_APPLE_RECEIPT: 2203,
+    /** Invalid google purchase data */
+    INVALID_GOOGLE_PURCHASE_DATA: 2204,
+    /** Invalid google signature */
+    INVALID_GOOGLE_SIGNATURE: 2205,
+    /** No google iap public key is registered */
+    NO_GOOGLE_IAP_PUBLIC_KEY: 2206,
+    /** Invalid google iap public key */
+    INVALID_GOOGLE_IAP_PUBLIC_KEY: 2207,
+    /** No kakao app auth info */
+    NO_KAKAO_APP_AUTH_INFO: 2208,
+
+    /** No iap conversion */
+    NO_IAP_CONVERSION: 2303,
+
+    /** Mission already completed */
+    MISSION_ALREADY_COMPLETED: 2401,
+
+    /** Expired coupon */
+    EXPIRED_COUPON: 2504,
+    /** The player has already consumed the coupon */
+    ALREADY_CONSUMED_COUPON: 2505,
+    /** The coupon is no more applicable */
+    NO_MORE_APPLICABLE_COUPON: 2506,
+
+    /** Not friend */
+    NOT_FRIEND: 2701,
+    /** Too many friends */
+    TOO_MANY_FRIENDS: 2705,
+
+    /** Already existing nickname */
+    ALREADY_EXISTING_NICKNAME: 2801,
+    /** Forbidden nickname */
+    FORBIDDEN_NICKNAME: 2802,
+
+    /** Javascript Exception: Script(javascript) 실행 때 예외 발생. 내용은 result_message를 참조 */
+    JS_EXCEPTION: 3001,
+
+    /** Undefined Script: 정의되지 않은 스크립트 */
+    UNDEFINED_PROCEDURE: 3101,
+    /** Protected Script: REST로 외부에서 직접 실행시킬 수 없는 스크립트 */
+    PROTECTED_PROCEDURE: 3102,
+    /** Undefined Library: 정의되지 않은 라이브러리 */
+    UNDEFINED_USER_LIB: 3103,
+    /** Undefined Library Method: 해당 라이브러리에 내에 정의되지 않은 method */
+    UNDEFINED_LIB_METHOD: 3104,
+
+    /** Object Not Found: load/save/destroy의 대상 객체를 찾을 수 없다 */
+    OBJECT_NOT_FOUND: 3201,
+    /** Invalid object */
+    INVALID_OBJECT: 3205,
+
+    /** Data Table Not Found: 정의된 Data Table이 없다 */
+    UNDEFINED_DATA_TABLE: 3301,
+
+    /** Invalid Return: return 불가능한 타입이 포함됨 */
+    INVALID_PROCEDURE_RETURN: 3401,
+    /** Undefined AppData Key: 정의되지 않은 HAppCounter, HAppDictionary, HAppQueue Key */
+    UNDEFINED_APPDATA_KEY: 3501,
+
+    /** Execution Timeout: 수행 시간 타임아웃 */
+    PROCEDURE_TIMEOUT: 3901,
+    /** Unsupported Library or Function: 지원되지 않는 라이브러리/함수 */
+    UNSUPPORTED_LIBRARY: 3903,
+    /** Unsupported Data Type: 지원되지 않는 데이터 형식 */
+    UNSUPPORTED_DATA_TYPE: 3904,
+
+    /** Already existing platform user name */
+    ALREADY_EXISTING_PLATFORM_USER_NAME: 4001,
+    /** Already existing platform user email */
+    ALREADY_EXISTING_PLATFORM_USER_EMAIL: 4002,
+    /** Invalid name or password */
+    INVALID_NAME_OR_PASSWORD: 4003,
+
+    /** Invalid push payload */
+    INVALID_PAYLOAD: 5001,
+
+    /** Campaign status is invalid */
+    INVALID_CAMPAIGN_STATUS: 5101,
+    /** Batch push status is invalid */
+    INVALID_BATCH_PUSH_STATUS: 5301,
+
+    /** Readonly forum: 읽기 전용 포럼에 쓰기, 수정, 삭제는 불가능 */
+    READONLY_FORUM: 6001,
+    /** Suspended forum: 사용 중단된 포럼 */
+    SUSPENDED_FORUM: 6002,
+
+    /** App Object가 다른데서 이미 수정되어 update가 불가능 */
+    APP_OBJECT_ALREADY_MODIFIED: 7001,
+
+    /** The user has been disabled */
+    PLAYER_HAS_BEEN_BLOCKED: 8001,
+    /** The session key is invalid */
+    INVALID_SESSION_KEY: 8002,
+    /** App configuration is invalid */
+    INVALID_APP_CONFIGURATION: 9001,
+
+    /** Internal Error: invalid app configuration */
+    NOT_IMPLEMENTED: 9998,
+    /** Unknown error */
+    UNKNOWN_ERROR: 9999
+  };
 }(this));
