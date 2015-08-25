@@ -1087,3 +1087,190 @@
     }
   };
 }(this));
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * Coupon
+   * @namespace Hive5.Coupon
+   * @memberOf Hive5
+   */
+  Hive5.Coupon = {
+
+    /**
+     * 발급된 쿠폰을 적용한다.
+     * @memberOf Hive5.Coupon
+     * @param {string} serial 쿠폰의 시리얼 번호.
+     */
+    apply: function (serial) {
+
+      var options = {
+        method: "POST",
+        route: "coupons/"+ serial + "/apply"
+      };
+
+      return Hive5._request(options);
+    }
+  };
+
+}(this));
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * DataTable
+   * @namespace Hive5.DataTable
+   * @memberOf Hive5
+   */
+  Hive5.DataTable = {
+
+    /**
+     * DataTable을 가져온다.
+     * @memberOf Hive5.DataTable
+     * @param {string} name DataTable 이름
+     * @param {number} [revision] Revision 정보. 이 정보가 있으면, 서버에 revision이 갱신된 경우에만 가져온다.
+     */
+    get: function (name, revision) {
+
+      var data = {
+        revision: revision
+      };
+
+      var options = {
+        method: "GET",
+        route: "data_table/"+ name,
+        data: data
+      };
+
+      return Hive5._request(options);
+    }
+  };
+
+}(this));
+
+(function (root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * Forum
+   * @namespace Hive5.Forum
+   * @memberOf Hive5
+   */
+  Hive5.Forum = {
+
+    /**
+     * 포럼에 등록된 글들을 가져온다.
+     * @memberOf Hive5.Forum
+     * @param {string} key Forum key
+     * @param {string} [offset=0] 가져온 글의 offset
+     * @param {string} [limit=20] 가져올 글의 개수를 지정
+     */
+    getThreads: function (key, offset, limit) {
+
+      var data = {
+        key: key,
+        offset: offset,
+        limit: limit
+      };
+
+      var options = {
+        method: "GET",
+        route: "forums/"+ key + "/threads",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 포럼에 등록된 글의 개수를 가져온다.
+     * @memberOf Hive5.Forum
+     * @param {string} key Forum key
+     */
+    countThreads: function (key) {
+
+      var options = {
+        method: "GET",
+        route: "forums/"+ key + "/threads/count",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 포럼에 글을 쓴다.
+     * @memberOf Hive5.Forum
+     * @param {string} key Forum key
+     * @param {string} title 제목
+     * @param {string} content 내용
+     * @param {*} [extras=null] 추가 데이터
+     */
+    createThread: function (key, title, content, extras) {
+
+      var data = {
+        key: key,
+        title: title,
+        content: content,
+        extras: extras
+      };
+
+      var options = {
+        method: "POST",
+        route: "forums/"+ key + "/threads",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 포럼에 쓴 글을 수정한다.
+     * @memberOf Hive5.Forum
+     * @param {string} key Forum key
+     * @param {string} id 수정할 글(thread)의 id
+     * @param {string} title 제목
+     * @param {string} content 내용
+     * @param {*} [extras=null] 추가 데이터
+     */
+    updateThread: function (key, id, title, content, extras) {
+
+      var data = {
+        key: key,
+        title: title,
+        content: content,
+        extras: extras
+      };
+
+      var options = {
+        method: "POST",
+        route: "forums/"+ key + "/threads/update/" + id,
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 포럼에 쓴 글을 삭제한다.
+     * @memberOf Hive5.Forum
+     * @param {string} key Forum key
+     * @param {string} id 수정할 글(thread)의 id
+     */
+    deleteThread: function (key, id) {
+
+      var options = {
+        method: "POST",
+        route: "forums/"+ key + "/threads/delete/" + id
+      }
+
+      return Hive5._request(options);
+    }
+  };
+
+}(this));

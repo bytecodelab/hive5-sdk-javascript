@@ -635,3 +635,83 @@ QUnit.test("Script.runScript test", function (assert) {
     });
   });
 });
+
+/*
+ * Forum
+ */
+QUnit.test("Forum.createThread and updateThread test", function (assert) {
+  var done = assert.async();
+  var forumKey = "test_forum";
+
+  initTest().then(function () {
+
+    var title = "test title";
+    var content = "test content";
+    var extras = {type:"heart", count:2};
+
+    var p = Hive5.Forum.createThread(forumKey, title, content, extras);
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      assert.equal(jsonData.hasOwnProperty("id"), true, "Passed!");
+
+      var threadId = jsonData.id;
+
+      var p = Hive5.Forum.getThreads(forumKey);
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        assert.ok(Array.isArray(jsonData.threads), "Passed!");
+        assert.equal(jsonData.threads[jsonData.threads.length-1].content, content,"Passed!");
+
+        // update
+        var newContent = "hahaha";
+        var p = Hive5.Forum.updateThread(forumKey, threadId, "title", newContent, {});
+        p.then(function (response) {
+          var jsonData = JSON.parse(response.raw);
+          assert.equal(jsonData.result_code, 0, "Passed!");
+
+          // list 로 update 확인
+          var p = Hive5.Forum.getThreads(forumKey);
+          p.then(function (response) {
+            var jsonData = JSON.parse(response.raw);
+            assert.equal(jsonData.threads[jsonData.threads.length-1].content, newContent,"Passed!");
+
+            // delete
+            var p = Hive5.Forum.deleteThread(forumKey, threadId);
+            p.then(function (response) {
+              var jsonData = JSON.parse(response.raw);
+              assert.equal(jsonData.result_code, 0, "Passed!");
+
+              // list로 확인
+              var p = Hive5.Forum.getThreads(forumKey);
+              p.then(function (response) {
+                var jsonData = JSON.parse(response.raw);
+                assert.equal(jsonData.threads.filter(function (thread) { return thread.id == threadId; }).length, 0, "Passed!");
+                done();
+              }).catch(function () {
+                assert.ok(false, "fails");
+                done();
+              });
+            }).catch(function () {
+              assert.ok(false, "fails");
+              done();
+            });
+          }).catch(function () {
+            assert.ok(false, "fails");
+            done();
+          });
+        }).catch(function () {
+          assert.ok(false, "fails");
+          done();
+        });
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
