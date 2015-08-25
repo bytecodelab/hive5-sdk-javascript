@@ -165,6 +165,151 @@ QUnit.test("Settings.setNickname test", function (assert) {
 });
 
 /*
+ * Mail
+ */
+QUnit.test("Mail.create and update test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+
+    var content = "test mail";
+    var p = Hive5.Mail.create(content, null, {type:"heart", count:2}, ["reward"]);
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      assert.equal(jsonData.hasOwnProperty("id"), true, "Passed!");
+
+      var mailId = jsonData.id;
+
+      var p = Hive5.Mail.list(10);
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        assert.ok(Array.isArray(jsonData.mails), "Passed!");
+        assert.equal(jsonData.mails[0].content, content,"Passed!");
+
+        // update
+        var newContent = "hahaha";
+        var p = Hive5.Mail.update(mailId, newContent, {});
+        p.then(function (response) {
+          var jsonData = JSON.parse(response.raw);
+          assert.equal(jsonData.result_code, 0, "Passed!");
+
+          // list 로 update 확인
+          var p = Hive5.Mail.list(10, "reward");
+          p.then(function (response) {
+            var jsonData = JSON.parse(response.raw);
+            assert.equal(jsonData.mails[0].content, newContent,"Passed!");
+
+            // delete
+            var p = Hive5.Mail.delete(mailId);
+            p.then(function (response) {
+              var jsonData = JSON.parse(response.raw);
+              assert.equal(jsonData.result_code, 0, "Passed!");
+
+              // count로  확인
+              var p = Hive5.Mail.count();
+              p.then(function (response) {
+                var jsonData = JSON.parse(response.raw);
+                assert.equal(jsonData.count, 0,"Passed!");
+                done();
+              }).catch(function () {
+                assert.ok(false, "fails");
+                done();
+              });
+            }).catch(function () {
+              assert.ok(false, "fails");
+              done();
+            });
+          }).catch(function () {
+            assert.ok(false, "fails");
+            done();
+          });
+        }).catch(function () {
+          assert.ok(false, "fails");
+          done();
+        });
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Mail.addTags test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+
+    var content = "test mail";
+    var p = Hive5.Mail.create(content, null, {type:"heart", count:2}, []);
+    p.then(function (response) {
+      console.log(response.raw);
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      assert.equal(jsonData.hasOwnProperty("id"), true, "Passed!");
+
+      var mailId = jsonData.id;
+      var tags = ["event", "test"];
+
+      var p = Hive5.Mail.addTags(mailId, tags);
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+
+        // list로  확인
+        var p = Hive5.Mail.list(10);
+        p.then(function (response) {
+          console.log(response.raw);
+          var jsonData = JSON.parse(response.raw);
+          assert.equal(jsonData.result_code, 0, "Passed!");
+          assert.equal(jsonData.mails[0].tags[0], tags[0], "Passed!");
+          assert.equal(jsonData.mails[0].tags[1], tags[1], "Passed!");
+
+          // remove tags
+          var p = Hive5.Mail.removeTags(mailId, tags);
+          p.then(function (response) {
+            console.log("removeTags:"+response.raw);
+            var jsonData = JSON.parse(response.raw);
+            assert.equal(jsonData.result_code, 0, "Passed!");
+
+            // list로  확인
+            var p = Hive5.Mail.list(10);
+            p.then(function (response) {
+              console.log(response.raw);
+              var jsonData = JSON.parse(response.raw);
+              assert.equal(jsonData.result_code, 0, "Passed!");
+              assert.equal(jsonData.mails[0].tags.length, 0, "Passed!");
+              done();
+            }).catch(function () {
+              assert.ok(false, "fails");
+              done();
+            });
+
+          }).catch(function () {
+            assert.ok(false, "fails");
+            done();
+          });
+        }).catch(function () {
+          assert.ok(false, "fails");
+          done();
+        });
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+/*
  * Leaderboard
  */
 var leaderboardKey = "leader1";

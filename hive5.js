@@ -355,6 +355,222 @@
   };
 }(this));
 
+(function(root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * 메일
+   * @namespace Hive5.Mail
+   * @memberOf Hive5
+   */
+  Hive5.Mail = {
+
+    /**
+     * 메일을 생성한다.
+     * @memberOf Hive5.Mail
+     * @param {string} content 메일 내용
+     * @param {Object} [user] 메일 수신자. null로 전달하면 로그인한 플레이어에게 보낸다
+     * @param {string} user.platform 수신자의 social platform
+     * @param {string} user.id 수신자의 user id
+     * @param {*} [extras=null] 추가 데이터.
+     * @param {string[]} [tags] 메일에 붙일 태그목록.
+     */
+    create: function (content, user, extras, tags) {
+
+      var data = {
+        content: content,
+        user: user,
+        extras: extras,
+        tags: tags
+      };
+
+      var options = {
+        method: "POST",
+        route: "mails",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일을 가져온다.
+     * @memberOf Hive5.Mail
+     * @param {number} limit 가져올 개수. 최대는 10개.
+     * @param {string} [tag] 특정 tag가 붙은 메일만 가져올때 지정한다.
+     * @param {string} [order="asc"] order를 "asc"로 하면, 오래된 것 부터 가져오며, "dec"로 하면 최신 것 부터 가져온다.
+     * @param {string} [afterMailId] 이 파라미터로 지정된 아이디 다음부터 가져온다. null이면, 첫 위치부터 가져온다.
+     */
+    list: function (limit, tag, order, afterMailId) {
+
+      var data = {
+        limit: limit,
+        order: order,
+        after_mail_id: afterMailId,
+        tag: tag
+      };
+
+      var options = {
+        method: "GET",
+        route: "mails",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일을 개수를 가져온다.
+     * @memberOf Hive5.Mail
+     * @param {string} [order="asc"] order를 "asc"로 하면, 오래된 것 부터 가져오며, "dec"로 하면 최신 것 부터 가져온다.
+     * @param {string} [afterMailId] 이 파라미터로 지정된 아이디 다음부터 가져온다. null이면, 첫 위치부터 가져온다.
+     * @param {string} [tag] 특정 tag가 붙은 메일만 가져올때 지정한다.
+     */
+    count: function (order, afterMailId, tag) {
+
+      var data = {
+        order: order,
+        after_mail_id: afterMailId,
+        tag: tag
+      };
+
+      var options = {
+        method: "GET",
+        route: "mails/count",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일을 업데이트한다.
+     * @memberOf Hive5.Mail
+     * @param {string} id 메일 아이디
+     * @param {string} content 메일 내용
+     * @param {*} extras 추가 데이터.
+     */
+    update: function (id, content, extras) {
+
+      var data = {
+        content: content,
+        extras: extras
+      };
+
+      var options = {
+        method: "POST",
+        route: "mails/update/"+id,
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일을 삭제한다.
+     * @memberOf Hive5.Mail
+     * @param {string} id 메일 아이디
+     */
+    delete: function (id) {
+
+      var options = {
+        method: "POST",
+        route: "mails/delete/"+id
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 오래된 메일을 삭제한다.
+     * @memberOf Hive5.Mail
+     * @param {number} days days로 지정된 날짜보다 오래된 메일을 삭제한다.
+     */
+    deleteOlderThan: function (days) {
+
+      var options = {
+        method: "POST",
+        route: "mails/delete_older_than/"+days
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 특정 개수를 초과한 메일을 삭제한다.
+     * @memberOf Hive5.Mail
+     * @param {number} count count로 지정된 개수보다 많은 메일을 삭제한다. 오래된 메일부터 삭제된다.
+     */
+    deleteMoreThan: function (count) {
+
+      var options = {
+        method: "POST",
+        route: "mails/delete_more_than/"+count
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일에 태그를 추가한다.
+     * @memberOf Hive5.Mail
+     * @param {string} id 메일 아이디
+     * @param {string[]} tags 태그의 목록
+     */
+    addTags: function (id, tags) {
+
+      var data = {
+        tags: tags
+      };
+
+      var options = {
+        method: "POST",
+        route: "mails/"+id+"/add_tags",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일에서 태그를 삭제가한다.
+     * @memberOf Hive5.Mail
+     * @param {string} id 메일 아이디
+     * @param {string[]} tags 태그의 목록
+     */
+    removeTags: function (id, tags) {
+
+      var data = {
+        tags: tags
+      };
+
+      var options = {
+        method: "POST",
+        route: "mails/"+id+"/remove_tags",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 메일에 reward가 있는 경우 reward를 적용한다.
+     * @memberOf Hive5.Mail
+     * @param {string} id 메일 아이디
+     */
+    applyReward: function (id, tags) {
+
+      var options = {
+        method: "POST",
+        route: "mails/"+id+"/rewards/apply"
+      };
+
+      return Hive5._request(options);
+    }
+  };
+}(this));
+
 (function (root) {
   root.Hive5 = root.Hive5 || {};
   var Hive5 = root.Hive5;
@@ -644,14 +860,12 @@
      * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
-     * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createGooglePurchase: function (productCode, receiver, mailForReceiver) {
 
       var data = {
         product_code: productCode,
-        receiver: receiver,
-        mail_for_receiver: mailForReceiver
+        receiver: receiver
       };
 
       var options = {
@@ -719,14 +933,12 @@
      * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
-     * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createApplePurchase: function (productCode, receiver, mailForReceiver) {
 
       var data = {
         product_code: productCode,
-        receiver: receiver,
-        mail_for_receiver: mailForReceiver
+        receiver: receiver
       };
 
       var options = {
@@ -786,15 +998,13 @@
      * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
-     * @param {string} [mailForReceiver] 친구에게 선물할 때 메일을 같이 보내려고 할 때, 메일의 content를 세팅
      */
     createNaverPurchase: function (productCode, paymentSequence, receiver, mailForReceiver) {
 
       var data = {
         product_code: productCode,
         payment_sequence: paymentSequence,
-        receiver: receiver,
-        mail_for_receiver: mailForReceiver
+        receiver: receiver
       };
 
       var options = {
