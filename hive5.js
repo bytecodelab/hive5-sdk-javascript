@@ -472,8 +472,8 @@
       };
 
       var options = {
-        method: "POST",
-        route: "mails/update/"+id,
+        method: "PUT",
+        route: "mails/"+id,
         data: data
       };
 
@@ -488,8 +488,8 @@
     delete: function (id) {
 
       var options = {
-        method: "POST",
-        route: "mails/delete/"+id
+        method: "DELETE",
+        route: "mails/"+id
       };
 
       return Hive5._request(options);
@@ -1261,8 +1261,8 @@
       };
 
       var options = {
-        method: "POST",
-        route: "forums/" + key + "/threads/update/" + id,
+        method: "PUT",
+        route: "forums/" + key + "/threads/" + id,
         data: data
       };
 
@@ -1278,8 +1278,8 @@
     deleteThread: function (key, id) {
 
       var options = {
-        method: "POST",
-        route: "forums/" + key + "/threads/delete/" + id
+        method: "DELETE",
+        route: "forums/" + key + "/threads/" + id
       }
 
       return Hive5._request(options);
