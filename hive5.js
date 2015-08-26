@@ -205,7 +205,7 @@
      * @return {Hive5.Promise.<LoginResult>} A promise that is fulfilled with the authentication when
      *     the login is complete.
      */
-    login: function (os, build, locale, platform, id) {
+    logIn: function (os, build, locale, platform, id) {
       var data = {
         os: os,
         build: build,
@@ -1356,9 +1356,9 @@
     JS_EXCEPTION: 3001,
 
     /** Undefined Script: 정의되지 않은 스크립트 */
-    UNDEFINED_PROCEDURE: 3101,
+    UNDEFINED_SCRIPT: 3101,
     /** Protected Script: REST로 외부에서 직접 실행시킬 수 없는 스크립트 */
-    PROTECTED_PROCEDURE: 3102,
+    PROTECTED_SCRIPT: 3102,
     /** Undefined Library: 정의되지 않은 라이브러리 */
     UNDEFINED_USER_LIB: 3103,
     /** Undefined Library Method: 해당 라이브러리에 내에 정의되지 않은 method */
@@ -1372,13 +1372,11 @@
     /** Data Table Not Found: 정의된 Data Table이 없다 */
     UNDEFINED_DATA_TABLE: 3301,
 
-    /** Invalid Return: return 불가능한 타입이 포함됨 */
-    INVALID_PROCEDURE_RETURN: 3401,
     /** Undefined AppData Key: 정의되지 않은 HAppCounter, HAppDictionary, HAppQueue Key */
     UNDEFINED_APPDATA_KEY: 3501,
 
     /** Execution Timeout: 수행 시간 타임아웃 */
-    PROCEDURE_TIMEOUT: 3901,
+    SCRIPT_TIMEOUT: 3901,
     /** Unsupported Library or Function: 지원되지 않는 라이브러리/함수 */
     UNSUPPORTED_LIBRARY: 3903,
     /** Unsupported Data Type: 지원되지 않는 데이터 형식 */

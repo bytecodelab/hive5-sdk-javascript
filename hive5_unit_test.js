@@ -17,7 +17,7 @@ function defaultInitialize() {
 
 function initTest() {
   defaultInitialize();
-  return Hive5.Auth.login(Config.os);
+  return Hive5.Auth.logIn(Config.os);
 }
 
 QUnit.test("initialize test", function (assert) {
@@ -30,7 +30,7 @@ QUnit.test("initialize test", function (assert) {
 /*
  * Auth
  */
-QUnit.test("Auth.login[anonymous] test", function (assert) {
+QUnit.test("Auth.logIn[anonymous] test", function (assert) {
   defaultInitialize();
   var done = assert.async();
 
@@ -38,7 +38,7 @@ QUnit.test("Auth.login[anonymous] test", function (assert) {
   var build = "1.0.0";
   var locale = "en-US";
 
-  var p = Hive5.Auth.login(os, build, locale);
+  var p = Hive5.Auth.logIn(os, build, locale);
   p.then(function (response) {
     var jsonData = JSON.parse(response.raw);
     assert.equal(jsonData.result_code, 0, "Passed!");
