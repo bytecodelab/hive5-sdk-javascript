@@ -53,11 +53,11 @@ QUnit.test("Auth.logIn[anonymous] test", function (assert) {
   });
 });
 
-QUnit.test("Auth.delete test", function (assert) {
+QUnit.test("Auth.unregister test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Auth.delete();
+    var p = Hive5.Auth.unregister();
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
@@ -151,6 +151,48 @@ QUnit.test("Settings.setNickname test", function (assert) {
         var jsonData = JSON.parse(response.raw);
         assert.equal(jsonData.result_code, 0, "Passed!");
         assert.equal(jsonData.available, false, "Passed!");
+        done();
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Settings.updatePushToken test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Settings.updatePushToken("gcm", "test_token");
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+      done();
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+QUnit.test("Settings.activate test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Settings.activate();
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+
+      var p = Hive5.Settings.deactivate();
+      p.then(function (response) {
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
         done();
       }).catch(function () {
         assert.ok(false, "fails");
@@ -347,11 +389,11 @@ QUnit.test("Leaderboard.submitScore and getMyScore test", function (assert) {
   });
 });
 
-QUnit.test("Leaderboard.getScores test", function (assert) {
+QUnit.test("Leaderboard.listScores test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Leaderboard.getScores(leaderboardKey, 1, 10);
+    var p = Hive5.Leaderboard.listScores(leaderboardKey, 1, 10);
     p.then(function (response) {
       console.log(response.raw);
       var jsonData = JSON.parse(response.raw);
@@ -366,51 +408,16 @@ QUnit.test("Leaderboard.getScores test", function (assert) {
   });
 });
 
-QUnit.test("Leaderboard.getSocialScores test", function (assert) {
+QUnit.test("Leaderboard.listSocialScores test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Leaderboard.getSocialScores(leaderboardKey);
+    var p = Hive5.Leaderboard.listSocialScores(leaderboardKey);
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       assert.equal(Array.isArray(jsonData.scores), true, "Passed!");
       assert.ok(jsonData.scores.length >= 1, "Passed!");
-      done();
-    }).catch(function () {
-      assert.ok(false, "fails");
-      done();
-    });
-  });
-});
-
-/*
- * Push
- */
-QUnit.test("Push.updatePushToken test", function (assert) {
-  var done = assert.async();
-
-  initTest().then(function () {
-    var p = Hive5.Push.updatePushToken("gcm", "test_token");
-    p.then(function (response) {
-      var jsonData = JSON.parse(response.raw);
-      assert.equal(jsonData.result_code, 0, "Passed!");
-      done();
-    }).catch(function () {
-      assert.ok(false, "fails");
-      done();
-    });
-  });
-});
-
-QUnit.test("Push.active test", function (assert) {
-  var done = assert.async();
-
-  initTest().then(function () {
-    var p = Hive5.Push.activate(false);
-    p.then(function (response) {
-      var jsonData = JSON.parse(response.raw);
-      assert.equal(jsonData.result_code, 0, "Passed!");
       done();
     }).catch(function () {
       assert.ok(false, "fails");
@@ -657,7 +664,7 @@ QUnit.test("Forum.createThread and updateThread test", function (assert) {
 
       var threadId = jsonData.id;
 
-      var p = Hive5.Forum.getThreads(forumKey);
+      var p = Hive5.Forum.listThreads(forumKey);
       p.then(function (response) {
         var jsonData = JSON.parse(response.raw);
         assert.equal(jsonData.result_code, 0, "Passed!");
@@ -672,7 +679,7 @@ QUnit.test("Forum.createThread and updateThread test", function (assert) {
           assert.equal(jsonData.result_code, 0, "Passed!");
 
           // list 로 update 확인
-          var p = Hive5.Forum.getThreads(forumKey);
+          var p = Hive5.Forum.listThreads(forumKey);
           p.then(function (response) {
             var jsonData = JSON.parse(response.raw);
             assert.equal(jsonData.threads[jsonData.threads.length-1].content, newContent,"Passed!");
@@ -684,7 +691,7 @@ QUnit.test("Forum.createThread and updateThread test", function (assert) {
               assert.equal(jsonData.result_code, 0, "Passed!");
 
               // list로 확인
-              var p = Hive5.Forum.getThreads(forumKey);
+              var p = Hive5.Forum.listThreads(forumKey);
               p.then(function (response) {
                 var jsonData = JSON.parse(response.raw);
                 assert.equal(jsonData.threads.filter(function (thread) { return thread.id == threadId; }).length, 0, "Passed!");

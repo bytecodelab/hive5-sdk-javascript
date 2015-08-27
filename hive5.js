@@ -218,7 +218,7 @@
 
       var options = {
         method: "POST",
-        route: "auth/login",
+        route: "auth/log_in",
         data: data
       };
 
@@ -250,10 +250,10 @@
      * });
      *
      */
-    delete: function () {
+    unregister: function () {
       var options = {
         method: "POST",
-        route: "auth/delete"
+        route: "auth/unregister"
       };
 
       return Hive5._request(options);
@@ -361,6 +361,59 @@
         method: "POST",
         route: "settings/nickname/set",
         data : {nickname: nickname}
+      };
+
+      return Hive5._request(options);
+    },
+
+
+    /**
+     * Push 토큰을 등록 또는 업데이트한다.
+     * @memberOf Hive5.Settings
+     * @param {string} platform Push platform으로 "gcm" 또는 "apns"를 지정한다.
+     * @param {string} token Push token
+     */
+    updatePushToken: function (platform, token) {
+
+      var data = {
+        push_platform: platform,
+        push_token: token
+      };
+
+      var options = {
+        method: "POST",
+        route: "settings/push_tokens/update",
+        data: data
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * Push 수신을 허용한다.
+     * @memberOf Hive5.Settings
+     * @return {Hive5.Promise}
+     */
+    activate: function () {
+
+      var options = {
+        method: "POST",
+        route: "settings/pushes/activate"
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * Push 수신을 거부한다.
+     * @memberOf Hive5.Settings
+     * @return {Hive5.Promise}
+     */
+    deactivate: function () {
+
+      var options = {
+        method: "POST",
+        route: "settings/pushes/deactivate"
       };
 
       return Hive5._request(options);
@@ -513,13 +566,13 @@
     /**
      * 특정 개수를 초과한 메일을 삭제한다.
      * @memberOf Hive5.Mail
-     * @param {number} count count로 지정된 개수보다 많은 메일을 삭제한다. 오래된 메일부터 삭제된다.
+     * @param {number} limit 최대 보관 메일 개수로 지정된 개수보다 많은 메일을 삭제한다. 오래된 메일부터 삭제된다.
      */
-    deleteMoreThan: function (count) {
+    deleteOverLimit: function (limit) {
 
       var options = {
         method: "POST",
-        route: "mails/delete_more_than/"+count
+        route: "mails/delete_over_limit/"+limit
       };
 
       return Hive5._request(options);
@@ -568,15 +621,15 @@
     },
 
     /**
-     * 메일에 reward가 있는 경우 reward를 적용한다.
+     * 메일에 reward가 있는 경우 reward를 받는다.
      * @memberOf Hive5.Mail
      * @param {string} id 메일 아이디
      */
-    applyReward: function (id, tags) {
+    acceptReward: function (id) {
 
       var options = {
         method: "POST",
-        route: "mails/"+id+"/rewards/apply"
+        route: "mails/"+id+"/rewards/accept"
       };
 
       return Hive5._request(options);
@@ -653,7 +706,7 @@
      * @param {number} [rangeMax] 특정 score 구간내의 목록으로 얻어오고자 할 때, 구간의 최대값
      * @return {Hive5.Promise}
      */
-    getScores: function (leaderboardKey, rankMin, rankMax, objectKeys, rangeMin, rangeMax) {
+    listScores: function (leaderboardKey, rankMin, rankMax, objectKeys, rangeMin, rangeMax) {
 
       var data = {
         object_class: objectKeys,
@@ -679,7 +732,7 @@
      * @param {string[]} [objectKeys] 사용자의 object를 가져올 수 있다. key의 array
      * @return {Hive5.Promise}
      */
-    getSocialScores: function (leaderboardKey, objectKeys) {
+    listSocialScores: function (leaderboardKey, objectKeys) {
 
       var data = {
         object_class: objectKeys
@@ -689,58 +742,6 @@
         method: "GET",
         route: "leaderboards/" + leaderboardKey + "/social_scores",
         data: data
-      };
-
-      return Hive5._request(options);
-    }
-  };
-
-}(this));
-
-(function (root) {
-  root.Hive5 = root.Hive5 || {};
-  var Hive5 = root.Hive5;
-
-  /**
-   * Push
-   * @namespace Hive5.Push
-   * @memberOf Hive5
-   */
-  Hive5.Push = {
-
-    /**
-     * Push 토큰을 등록 또는 업데이트한다.
-     * @memberOf Hive5.Push
-     * @param {string} platform Push platform으로 "gcm" 또는 "apns"를 지정한다.
-     * @param {string} token Push token
-     */
-    updatePushToken: function (platform, token) {
-
-      var data = {
-        push_platform: platform,
-        push_token: token
-      };
-
-      var options = {
-        method: "POST",
-        route: "pushes/register",
-        data: data
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * Push 수신을 활성화하거나 비활성화한다.
-     * @memberOf Hive5.Push
-     * @param {boolean} activeFlag Push 수신여부
-     * @return {Hive5.Promise}
-     */
-    activate: function (activeFlag) {
-
-      var options = {
-        method: "POST",
-        route: "pushes/activate/" + activeFlag
       };
 
       return Hive5._request(options);
@@ -1117,11 +1118,11 @@
      * @memberOf Hive5.Coupon
      * @param {string} serial 쿠폰의 시리얼 번호.
      */
-    apply: function (serial) {
+    redeem: function (serial) {
 
       var options = {
         method: "POST",
-        route: "coupons/"+ serial + "/apply"
+        route: "coupons/"+ serial + "/redeem"
       };
 
       return Hive5._request(options);
@@ -1183,7 +1184,7 @@
      * @param {string} [offset=0] 가져온 글의 offset
      * @param {string} [limit=20] 가져올 글의 개수를 지정
      */
-    getThreads: function (key, offset, limit) {
+    listThreads: function (key, offset, limit) {
 
       var data = {
         key: key,
