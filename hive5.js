@@ -1332,9 +1332,6 @@
     /** No iap conversion */
     NO_IAP_CONVERSION: 2303,
 
-    /** Mission already completed */
-    MISSION_ALREADY_COMPLETED: 2401,
-
     /** Expired coupon */
     EXPIRED_COUPON: 2504,
     /** The player has already consumed the coupon */
@@ -1361,13 +1358,15 @@
     PROTECTED_SCRIPT: 3102,
     /** Undefined Library: 정의되지 않은 라이브러리 */
     UNDEFINED_USER_LIB: 3103,
-    /** Undefined Library Method: 해당 라이브러리에 내에 정의되지 않은 method */
-    UNDEFINED_LIB_METHOD: 3104,
 
     /** Object Not Found: load/save/destroy의 대상 객체를 찾을 수 없다 */
     OBJECT_NOT_FOUND: 3201,
     /** Invalid object */
     INVALID_OBJECT: 3205,
+    /** Already Existing Object: 이미 존재하는 Object임 */
+    ALREADY_EXISTING_OBJECT: 3206,
+    /** Invalid Object Key: object의 key 명명 규칙에 위배 */
+    INVALID_OBJECT_KEY: 3207,
 
     /** Data Table Not Found: 정의된 Data Table이 없다 */
     UNDEFINED_DATA_TABLE: 3301,
