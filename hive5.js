@@ -1311,7 +1311,9 @@
     /** Invalid reward */
     INVALID_REWARD: 2101,
     /** The reward was already applied */
-    ALREADY_APPLIED__REWARD: 2102,
+    ALREADY_ACCEPTED_REWARD: 2102,
+    /** Invalid tag pattern */
+    INVALID_TAG_PATTERN: 2103,
 
     /** Invalid purchase status */
     INVALID_PURCHASE_STATUS: 2201,
