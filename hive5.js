@@ -84,7 +84,7 @@
           return typeof data[key] != "undefined";
         }).map(function (key) {
           if (Array.isArray(data[key]))
-            return data[key].map(function(value) {return key + "=" + value}).join("&");
+            return key + "=" + data[key].join(",");
           else
             return key + "=" + data[key];
         }).join("&");
