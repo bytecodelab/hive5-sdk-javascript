@@ -534,35 +534,33 @@ QUnit.test("Purchase.createGooglePurchase test", function (assert) {
         assert.equal(result.purchase.id, jsonData.id, "Passed!");
         assert.equal(result.purchase.product_code, "code_001", "Passed!");
         assert.equal(result.purchase.status, "created", "Passed!");
-        done();
+        //done();
+
+        var params = {test:true};
+        var purchaseData = "test";
+        var signature = "test";
+        var listPrice = 100;
+        var purchasedPrice = 100;
+
+        var p = Hive5.Purchase.completeGooglePurchase(jsonData.id, params, listPrice, purchasedPrice, "KRW", purchaseData, signature, true);  // 결제 Test mode로 진행
+        p.then(function (response) {
+
+          console.log(response.raw);
+
+          var jsonData = JSON.parse(response.raw);
+          assert.equal(jsonData.result_code, 0, "Passed!");
+          assert.equal(jsonData.call_return.test, true, "Passed!");
+          done();
+        }).catch(function () {
+          assert.ok(false, "fails");
+          done();
+        });
+
       }).catch(function () {
         assert.ok(false, "fails");
         done();
       });
     });
-
-    //  var params = {};
-    //  var purchaseData = "test";
-    //  var signature = "test";
-    //  var listPrice = 100;
-    //  var purchasedPrice = 100;
-    //
-    //  var p = Hive5.Purchase.completeGooglePurchase(jsonData.id, params, listPrice, purchasedPrice, "KRW", purchaseData, signature);
-    //  p.then(function (response) {
-    //
-    //    console.log(response.raw);
-    //
-    //    var jsonData = JSON.parse(response.raw);
-    //    assert.equal(jsonData.result_code, 0, "Passed!");
-    //    done();
-    //  }).catch(function () {
-    //    assert.ok(false, "fails");
-    //    done();
-    //  });
-    //}).catch(function () {
-    //  assert.ok(false, "fails");
-    //  done();
-    //});
   });
 });
 

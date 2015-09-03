@@ -875,7 +875,7 @@
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
      */
-    createGooglePurchase: function (productCode, receiver, mailForReceiver) {
+    createGooglePurchase: function (productCode, receiver) {
 
       var data = {
         product_code: productCode,
@@ -901,8 +901,9 @@
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
      * @param {string} purchaseData Google IAP API에서 응답받은 내용 중 purchase data
      * @param {string} signature Google IAP API에서 응답받은 내용 중 signature
+     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
      */
-    completeGooglePurchase: function (id, params, listPrice, purchasedPrice, currency, purchaseData, signature) {
+    completeGooglePurchase: function (id, params, listPrice, purchasedPrice, currency, purchaseData, signature, test) {
 
       var data = {
         params: params,
@@ -910,7 +911,8 @@
         signature: signature,
         list_price: listPrice,
         purchased_price: purchasedPrice,
-        currency: currency
+        currency: currency,
+        test: test
       };
 
       var options = {
@@ -948,7 +950,7 @@
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
      */
-    createApplePurchase: function (productCode, receiver, mailForReceiver) {
+    createApplePurchase: function (productCode, receiver) {
 
       var data = {
         product_code: productCode,
@@ -974,8 +976,9 @@
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
      * @param {string} receipt Apple 결제 후 받은 'receipt'. Base 64 Encoding이 필요함
      * @param {boolean} [isSandbox=false] receipt가 apple의 sandbox용 일 경우에 true. 그렇지 않으면 false
+     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
      */
-    completeApplePurchase: function (id, params, listPrice, purchasedPrice, currency, receipt, isSandbox) {
+    completeApplePurchase: function (id, params, listPrice, purchasedPrice, currency, receipt, isSandbox, test) {
 
       var data = {
         params: params,
@@ -983,7 +986,8 @@
         is_sandbox: isSandbox,
         list_price: listPrice,
         purchased_price: purchasedPrice,
-        currency: currency
+        currency: currency,
+        test: test
       };
 
       var options = {
@@ -1013,7 +1017,7 @@
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
      */
-    createNaverPurchase: function (productCode, paymentSequence, receiver, mailForReceiver) {
+    createNaverPurchase: function (productCode, paymentSequence, receiver) {
 
       var data = {
         product_code: productCode,
@@ -1038,14 +1042,16 @@
      * @param {number} listPrice 원래 상품의 가격
      * @param {number} purchasedPrice 실제 구매한 가격
      * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
+     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
      */
-    completeNaverPurchase: function (id, params, listPrice, purchasedPrice, currency) {
+    completeNaverPurchase: function (id, params, listPrice, purchasedPrice, currency, test) {
 
       var data = {
         params: params,
         list_price: listPrice,
         purchased_price: purchasedPrice,
-        currency: currency
+        currency: currency,
+        test: test
       };
 
       var options = {
