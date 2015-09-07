@@ -187,6 +187,7 @@
      * @property {Object} user 사용자.
      *  @property {string} user.platform 로그인한 사용자의 플랫폼.
      *  @property {string} user.id 로그인한 사용자의 unique한 고유 Id, platform이 'anonymous'인 경우 hive5에서 id를 발급한다.
+     * @property {string} nickname 닉네임.
      * @property {integer} new_mail_count 지난 로그인 이후 도착한 메일 수
      * @property {*} [extras] 추가 데이터. 이 값을 세팅하면, 목록을 가져올 때 이 데이터도 가져올 수 있다.
      */
@@ -463,17 +464,17 @@
     /**
      * 메일을 가져온다.
      * @memberOf Hive5.Mail
-     * @param {number} limit 가져올 개수. 최대는 10개.
+     * @param {string} [order="dec"] order를 "asc"로 하면 오래된 메일부터, "dec"로 하면 새로운 메일부터 가져온다.
+     * @param {number} [offset] 메일을 가져올 위치를 지정한다.
+     * @param {number} [limit] 가져올 개수. 최대는 20개.
      * @param {string} [tag] 특정 tag가 붙은 메일만 가져올때 지정한다.
-     * @param {string} [order="asc"] order를 "asc"로 하면, 오래된 것 부터 가져오며, "dec"로 하면 최신 것 부터 가져온다.
-     * @param {string} [afterMailId] 이 파라미터로 지정된 아이디 다음부터 가져온다. null이면, 첫 위치부터 가져온다.
      */
-    list: function (limit, tag, order, afterMailId) {
+    list: function (order, offset, limit, tag) {
 
       var data = {
-        limit: limit,
         order: order,
-        after_mail_id: afterMailId,
+        offset: offset,
+        limit: limit,
         tag: tag
       };
 
@@ -489,15 +490,11 @@
     /**
      * 메일을 개수를 가져온다.
      * @memberOf Hive5.Mail
-     * @param {string} [order="asc"] order를 "asc"로 하면, 오래된 것 부터 가져오며, "dec"로 하면 최신 것 부터 가져온다.
-     * @param {string} [afterMailId] 이 파라미터로 지정된 아이디 다음부터 가져온다. null이면, 첫 위치부터 가져온다.
      * @param {string} [tag] 특정 tag가 붙은 메일만 가져올때 지정한다.
      */
-    count: function (order, afterMailId, tag) {
+    count: function (tag) {
 
       var data = {
-        order: order,
-        after_mail_id: afterMailId,
         tag: tag
       };
 

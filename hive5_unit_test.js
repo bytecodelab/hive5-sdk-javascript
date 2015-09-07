@@ -223,7 +223,7 @@ QUnit.test("Mail.create and update test", function (assert) {
 
       var mailId = jsonData.id;
 
-      var p = Hive5.Mail.list(10);
+      var p = Hive5.Mail.list();
       p.then(function (response) {
         var jsonData = JSON.parse(response.raw);
         assert.equal(jsonData.result_code, 0, "Passed!");
@@ -238,7 +238,7 @@ QUnit.test("Mail.create and update test", function (assert) {
           assert.equal(jsonData.result_code, 0, "Passed!");
 
           // list 로 update 확인
-          var p = Hive5.Mail.list(10, "reward");
+          var p = Hive5.Mail.list("dec", 0, 10, "reward");
           p.then(function (response) {
             var jsonData = JSON.parse(response.raw);
             assert.equal(jsonData.mails[0].content, newContent,"Passed!");
@@ -304,7 +304,7 @@ QUnit.test("Mail.addTags test", function (assert) {
         assert.equal(jsonData.result_code, 0, "Passed!");
 
         // list로  확인
-        var p = Hive5.Mail.list(10);
+        var p = Hive5.Mail.list();
         p.then(function (response) {
           console.log(response.raw);
           var jsonData = JSON.parse(response.raw);
@@ -320,7 +320,7 @@ QUnit.test("Mail.addTags test", function (assert) {
             assert.equal(jsonData.result_code, 0, "Passed!");
 
             // list로  확인
-            var p = Hive5.Mail.list(10);
+            var p = Hive5.Mail.list();
             p.then(function (response) {
               console.log(response.raw);
               var jsonData = JSON.parse(response.raw);
@@ -680,7 +680,7 @@ QUnit.test("Forum.createThread and updateThread test", function (assert) {
           var p = Hive5.Forum.listThreads(forumKey);
           p.then(function (response) {
             var jsonData = JSON.parse(response.raw);
-            assert.equal(jsonData.threads[jsonData.threads.length-1].content, newContent,"Passed!");
+            assert.equal(jsonData.threads[0].content, newContent,"Passed!");
 
             // delete
             var p = Hive5.Forum.deleteThread(forumKey, threadId);
