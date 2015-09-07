@@ -1187,13 +1187,15 @@
      * 포럼에 등록된 글들을 가져온다.
      * @memberOf Hive5.Forum
      * @param {string} key Forum key
+     * @param {string} [order="dec"] 가져온 글 순서. "asc"는 오래된 글부터, "dec"는 새로운 글부터
      * @param {string} [offset=0] 가져온 글의 offset
      * @param {string} [limit=20] 가져올 글의 개수를 지정
      */
-    listThreads: function (key, offset, limit) {
+    listThreads: function (key, order, offset, limit) {
 
       var data = {
         key: key,
+        order: order,
         offset: offset,
         limit: limit
       };
