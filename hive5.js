@@ -127,11 +127,11 @@
       // add headers
       xhr.setRequestHeader("X-APP-KEY", Hive5._appKey);
       xhr.setRequestHeader("X-AUTH-UUID", Hive5._uuid);
-      if (Hive5._accessToken) {
-        xhr.setRequestHeader("X-AUTH-TOKEN", Hive5._accessToken);
+      if (Hive5.Auth._accessToken) {
+        xhr.setRequestHeader("X-AUTH-TOKEN", Hive5.Auth._accessToken);
       }
-      if (Hive5._sessionKey) {
-        xhr.setRequestHeader("X-AUTH-SESSION", Hive5._sessionKey);
+      if (Hive5.Auth._sessionKey) {
+        xhr.setRequestHeader("X-AUTH-SESSION", Hive5.Auth._sessionKey);
       }
       if (Hive5._requestId) {
         xhr.setRequestHeader("X-REQUEST-ID", Hive5._requestId);
@@ -177,6 +177,11 @@
    * @memberOf Hive5
    */
   Hive5.Auth = {
+    /**
+     * @memberOf Hive5.Auth
+     * @var Logged in user
+     */
+    user: null,
 
     /**
      * @typedef {Object} LoginResult
@@ -224,9 +229,9 @@
           function(response) {
             var jsonData = JSON.parse(response.raw);
 
-            Hive5._accessToken = jsonData.access_token;
-            Hive5._sessionKey = jsonData.session_key;
-            Hive5._user = jsonData.user;
+            Hive5.Auth._accessToken = jsonData.access_token;
+            Hive5.Auth._sessionKey = jsonData.session_key;
+            Hive5.Auth.user = jsonData.user;
 
             resolve(response);
            }
