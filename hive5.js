@@ -193,18 +193,14 @@
      */
 
     /**
-     * Logs in a Hive5.Auth. On success, this saves the session to localStorage,
-     * so you can retrieve the currently logged in user using
-     * <code>current</code>.
-     *
+     * 로그인을 수행한다.
      * @memberOf Hive5.Auth
-     * @param {string} [os] Operation System (ex, ios, android)
+     * @param {string} [os] 클라이언브의 OS (ex, ios, android)
      * @param {string} [build] Build version (ex, 1.0.0)
      * @param {string} [locale] Locale (ex, ko-KR)
-     * @param {string} [platform] Authentication platform (ex, facebook, kakao)
-     * @param {string} [id] User Id dedicated to platform
-     * @return {Hive5.Promise.<LoginResult>} A promise that is fulfilled with the authentication when
-     *     the login is complete.
+     * @param {string} [platform] 연동 대상이 되는 소셜 플랫폼 (ex, facebook, kakao)
+     * @param {string} [id] platform에 사용하는 id
+     * @return {Hive5.Promise.<LoginResult>}
      */
     logIn: function (os, build, locale, platform, id) {
       var data = {
@@ -241,15 +237,8 @@
     },
 
     /**
-     * Withdraws from the game.
+     * 회원 탈퇴한다.
      * @memberOf Hive5.Auth
-     * @example
-     * Hive5.Auth.delete().then(function (response) {
-     *  // handle result
-     * }).catch(function (response) {
-     *  // handle error
-     * });
-     *
      */
     unregister: function () {
       var options = {
@@ -277,41 +266,6 @@
       };
 
       return Hive5._request(options);
-    },
-
-    /**
-     * 약관 동의를 처리한다.
-     * @memberOf Hive5.Auth
-     * @param {string} agreementName 약관의 이름이나 버전
-     * @param {string} agreementValue 약관에 동의한 내용
-     * @return {Hive5.Promise}
-     */
-    submitAgreements: function (agreementName, agreementValue) {
-      var agreement = {};
-      agreement[agreementName] = agreementValue;
-
-      var options = {
-        method: "POST",
-        route: "agreements",
-        data : agreement
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * 약관 동의 기록을 조회한다.
-     * @memberOf Hive5.Auth
-     * @return {Hive5.Promise}
-     */
-    getAgreements: function () {
-
-      var options = {
-        method: "GET",
-        route: "agreements"
-      };
-
-      return Hive5._request(options);
     }
   };
 
@@ -322,29 +276,24 @@
   var Hive5 = root.Hive5;
 
   /**
-   * Representation of settings like setting nickname and so on.
-   * @namespace Hive5.Settings
+   * 플레이어
+   * @namespace Hive5.Player
    * @memberOf Hive5
    */
-  Hive5.Settings = {
+  Hive5.Player = {
 
     /**
-     * Check availability of nickname in a Hive5.Settings. On success, this saves the session to localStorage,
-     * so you can retrieve the result.
-     * <code>current</code>.
+     * 닉네임으로 사용할 수 있는지 확인한다.
      *
-     * <p>description</p>
-     *
-     * @memberOf Hive5.Settings
-     * @param {string} nickname Nickname for a user
-     * @return {Hive5.Promise} A promise that is fulfilled with the authentication when
-     *     the login is complete.
+     * @memberOf Hive5.Player
+     * @param {string} nickname Nickname
+     * @return {Hive5.Promise}
      */
     checkNicknameAvailability: function (nickname) {
 
       var options = {
         method: "GET",
-        route: "settings/nickname/is_available/" + nickname
+        route: "players/me/nickname/is_available/" + nickname
       };
 
       return Hive5._request(options);
@@ -352,7 +301,7 @@
 
     /**
      * 닉네임을 설정한다.
-     * @memberOf Hive5.Settings
+     * @memberOf Hive5.Player
      * @param {string} nickname Nickname
      * @return {Hive5.Promise}
      */
@@ -360,13 +309,57 @@
 
       var options = {
         method: "POST",
-        route: "settings/nickname/set",
+        route: "players/me/nickname",
         data : {nickname: nickname}
       };
 
       return Hive5._request(options);
     },
 
+    /**
+     * 플레이어의 추가데이터(extras)를 가져온다.
+     * @memberOf Hive5.Player
+     * @return {Hive5.Promise}
+     */
+    getExtras: function () {
+      var options = {
+        method: "GET",
+        route: "players/me/extras"
+      };
+
+      return Hive5._request(options);
+    },
+
+    /**
+     * 플레이어의 추가데이터를 세팅한다.
+     * @memberOf Hive5.Player
+     * @param {*} extras 추가데이터
+     * @return {Hive5.Promise}
+     */
+    setExtras: function (extras) {
+
+      var options = {
+        method: "POST",
+        route: "players/me/extras",
+        data : {extras: extras}
+      };
+
+      return Hive5._request(options);
+    }
+  };
+}(this));
+
+
+(function(root) {
+  root.Hive5 = root.Hive5 || {};
+  var Hive5 = root.Hive5;
+
+  /**
+   * 세팅
+   * @namespace Hive5.Settings
+   * @memberOf Hive5
+   */
+  Hive5.Settings = {
 
     /**
      * Push 토큰을 등록 또는 업데이트한다.

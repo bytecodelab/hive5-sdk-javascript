@@ -86,41 +86,14 @@ QUnit.test("Auth.switchPlatform test", function (assert) {
   });
 });
 
-QUnit.test("Auth.agreements test", function (assert) {
-  var done = assert.async();
-
-  initTest().then(function () {
-    var p = Hive5.Auth.submitAgreements("agreementVersion", "2.0b");
-    p.then(function (response) {
-      var jsonData = JSON.parse(response.raw);
-      assert.equal(jsonData.result_code, 0, "Passed!");
-
-      var p = Hive5.Auth.getAgreements();
-      p.then(function (response) {
-        var jsonData = JSON.parse(response.raw);
-        assert.equal(jsonData.result_code, 0, "Passed!");
-        assert.equal(jsonData.agreements.agreementVersion.version, "2.0b", "Passed!");
-        done();
-      }).catch(function () {
-        assert.ok(false, "fails");
-        done();
-      });
-
-    }).catch(function () {
-      assert.ok(false, "fails");
-      done();
-    });
-  });
-});
-
 /*
- * Settings
+ * Player
  */
-QUnit.test("Settings.checkNicknameAvailability test", function (assert) {
+QUnit.test("Player.checkNicknameAvailability test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Settings.checkNicknameAvailability("my_nickname1234");
+    var p = Hive5.Player.checkNicknameAvailability("my_nickname1234");
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
@@ -133,20 +106,20 @@ QUnit.test("Settings.checkNicknameAvailability test", function (assert) {
   });
 });
 
-QUnit.test("Settings.setNickname test", function (assert) {
+QUnit.test("Player.setNickname test", function (assert) {
   var done = assert.async();
 
   initTest().then(function (loginResponse) {
     var jsonData = JSON.parse(loginResponse.raw);
     var nickname = "nickname_" + jsonData.user.id;
 
-    var p = Hive5.Settings.setNickname(nickname);
+    var p = Hive5.Player.setNickname(nickname);
     p.then(function (response) {
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
 
       // nickname 설정 여부 확인
-      var p = Hive5.Settings.checkNicknameAvailability(nickname);
+      var p = Hive5.Player.checkNicknameAvailability(nickname);
       p.then(function (response) {
         var jsonData = JSON.parse(response.raw);
         assert.equal(jsonData.result_code, 0, "Passed!");
@@ -164,6 +137,40 @@ QUnit.test("Settings.setNickname test", function (assert) {
   });
 });
 
+QUnit.test("Player.extras test", function (assert) {
+  var done = assert.async();
+
+  var extras = "Hello, world";
+
+  initTest().then(function () {
+    var p = Hive5.Player.setExtras(extras);
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+
+      var p = Hive5.Player.getExtras();
+      p.then(function (response) {
+        console.log(response.raw)
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        assert.equal(jsonData.extras, extras, "Passed!");
+        done();
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
+
+
+/*
+ * Settings
+ */
 QUnit.test("Settings.updatePushToken test", function (assert) {
   var done = assert.async();
 
@@ -433,13 +440,13 @@ QUnit.test("SocialGraph.add/remove/list Friends test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.SocialGraph.addFriends("test_group", [{platform:"anonymous", id:"21"}, {platform:"anonymous", id:"22"}]);
+    var p = Hive5.SocialGraph.addFriends("test_group", [{platform:"anonymous", id:"22"}, {platform:"anonymous", id:"23"}]);
     p.then(function (response) {
 
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
 
-      var p = Hive5.SocialGraph.removeFriends("test_group", [{platform:"anonymous", id:"21"}]);
+      var p = Hive5.SocialGraph.removeFriends("test_group", [{platform:"anonymous", id:"22"}]);
       p.then(function (response) {
 
         var jsonData = JSON.parse(response.raw);
@@ -447,11 +454,10 @@ QUnit.test("SocialGraph.add/remove/list Friends test", function (assert) {
 
         var p = Hive5.SocialGraph.listFriends("test_group");
         p.then(function (response) {
-
           var jsonData = JSON.parse(response.raw);
           assert.equal(jsonData.result_code, 0, "Passed!");
           assert.equal(jsonData.friends.length, 1, "Passed!");
-          assert.equal(jsonData.friends[0].id, "22", "Passed!");
+          assert.equal(jsonData.friends[0].user.id, "23", "Passed!");
           done();
 
         }).catch(function () {
@@ -493,8 +499,8 @@ QUnit.test("SocialGraph.updateFriends test", function (assert) {
           var jsonData = JSON.parse(response.raw);
           assert.equal(jsonData.result_code, 0, "Passed!");
           assert.equal(jsonData.friends.length, 2, "Passed!");
-          assert.equal(jsonData.friends[0].id, "22", "Passed!");
-          assert.equal(jsonData.friends[1].id, "23", "Passed!");
+          assert.equal(jsonData.friends[0].user.id, "22", "Passed!");
+          assert.equal(jsonData.friends[1].user.id, "23", "Passed!");
           done();
 
         }).catch(function () {
