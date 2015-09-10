@@ -1213,8 +1213,7 @@
 
       var options = {
         method: "GET",
-        route: "forums/" + key + "/threads/count",
-        data: data
+        route: "forums/" + key + "/threads/count"
       };
 
       return Hive5._request(options);
