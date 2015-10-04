@@ -2,7 +2,7 @@
  * @fileOverview Hive5 JavaScript SDK
  * <br>
  * <br>Visit {@link http://www.hive5.io}
- * @version 1.0.0
+ * @version 1.0.0-beta
  * @author Gilbert Lee, Artie Choi
  * @copyright 2015 BytecodeLab, Co.
  */
