@@ -205,18 +205,22 @@
      * @param {string} [locale] Locale (ex, ko-KR)
      * @param {string} [platform] 연동 대상이 되는 소셜 플랫폼 (ex, facebook, kakao)
      * @param {string} [id] platform에 사용하는 id
+     * @param {Object} [platformParams] platform 인증에 필요한 정보들
      * @return {Hive5.Promise.<LoginResult>}
      */
-    logIn: function (os, build, locale, platform, id) {
+    logIn: function (os, build, locale, platform, id, platform_params) {
       var data = {
         os: os,
         build: build,
-        locale: locale
+        locale: locale,
+        platform_params: platform_params
       };
 
       if (platform && id) {
         data.user = {platform:platform, id:id}
       }
+
+      if ()
 
       var options = {
         method: "POST",
