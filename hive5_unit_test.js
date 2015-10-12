@@ -524,17 +524,19 @@ QUnit.test("SocialGraph.updateFriends test", function (assert) {
 /*
  * Purchase
  */
-QUnit.test("Purchase.createGooglePurchase test", function (assert) {
+QUnit.test("Purchase.create test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Purchase.createGooglePurchase("code_001");
+    var p = Hive5.Purchase.create("test", {}, "code_001");
     p.then(function (response) {
+      console.log(response.raw);
+
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       assert.ok(jsonData.id.length > 0, "Passed!");
 
-      var p = Hive5.Purchase.getGooglePurchaseStatus(jsonData.id);
+      var p = Hive5.Purchase.get(jsonData.id);
       p.then(function (response) {
         var result = JSON.parse(response.raw);
         assert.equal(result.result_code, 0, "Passed!");
@@ -544,12 +546,10 @@ QUnit.test("Purchase.createGooglePurchase test", function (assert) {
         //done();
 
         var params = {test:true};
-        var purchaseData = "test";
-        var signature = "test";
         var listPrice = 100;
         var purchasedPrice = 100;
 
-        var p = Hive5.Purchase.completeGooglePurchase(jsonData.id, params, listPrice, purchasedPrice, "KRW", purchaseData, signature, true);  // 결제 Test mode로 진행
+        var p = Hive5.Purchase.complete(jsonData.id, "test", {auth_key:"test_key"}, listPrice, purchasedPrice, "KRW", params);
         p.then(function (response) {
 
           console.log(response.raw);
@@ -567,61 +567,6 @@ QUnit.test("Purchase.createGooglePurchase test", function (assert) {
         assert.ok(false, "fails");
         done();
       });
-    });
-  });
-});
-
-QUnit.test("Purchase.createApplePurchase test", function (assert) {
-  var done = assert.async();
-
-  initTest().then(function () {
-    var p = Hive5.Purchase.createApplePurchase("code_002");
-    p.then(function (response) {
-      var jsonData = JSON.parse(response.raw);
-      assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.ok(jsonData.id.length > 0, "Passed!");
-
-      var p = Hive5.Purchase.getApplePurchaseStatus(jsonData.id);
-      p.then(function (response) {
-        var result = JSON.parse(response.raw);
-        assert.equal(result.result_code, 0, "Passed!");
-        assert.equal(result.purchase.id, jsonData.id, "Passed!");
-        assert.equal(result.purchase.product_code, "code_002", "Passed!");
-        assert.equal(result.purchase.status, "created", "Passed!");
-        done();
-      }).catch(function () {
-        assert.ok(false, "fails");
-        done();
-      });
-    });
-  });
-});
-
-QUnit.test("Purchase.createNaverPurchase test", function (assert) {
-  var done = assert.async();
-
-  initTest().then(function () {
-    var p = Hive5.Purchase.createNaverPurchase("code_003", "a"+Math.floor((Math.random() * 100000000000)));
-    p.then(function (response) {
-      var jsonData = JSON.parse(response.raw);
-      assert.equal(jsonData.result_code, 0, "Passed!");
-      assert.ok(jsonData.id.length > 0, "Passed!");
-
-      var p = Hive5.Purchase.getNaverPurchaseStatus(jsonData.id);
-      p.then(function (response) {
-        var result = JSON.parse(response.raw);
-        assert.equal(result.result_code, 0, "Passed!");
-        assert.equal(result.purchase.id, jsonData.id, "Passed!");
-        assert.equal(result.purchase.product_code, "code_003", "Passed!");
-        assert.equal(result.purchase.status, "created", "Passed!");
-        done();
-      }).catch(function () {
-        assert.ok(false, "fails");
-        done();
-      });
-    }).catch(function () {
-      assert.ok(false, "fails");
-      done();
     });
   });
 });

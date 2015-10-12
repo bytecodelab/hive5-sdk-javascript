@@ -865,23 +865,27 @@
   Hive5.Purchase = {
 
     /**
-     * 구글 결제를 시작한다.
+     * 결제를 위한 구매를 시작한다.
      * @memberOf Hive5.Purchase
+     * @param {string} platform 빌링 플랫폼
+     * @param {Object} platform_params 빌링 플랫폼에 따른 추가 정보
      * @param {string} productCode 상품 코드
      * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
      * @param {string} receiver.platform 사용자의 social platform
      * @param {string} receiver.id 사용자의 user id
      */
-    createGooglePurchase: function (productCode, receiver) {
+    create: function (platform, platformParams, productCode, receiver) {
 
       var data = {
+        platform: platform,
+        platform_params: platformParams,
         product_code: productCode,
         receiver: receiver
       };
 
       var options = {
         method: "POST",
-        route: "google_purchases",
+        route: "purchases",
         data: data
       };
 
@@ -889,186 +893,49 @@
     },
 
     /**
-     * 구글 결제를 완료 처리한다.
+     * 결제 후 구매 완료 처리한다.
      * @memberOf Hive5.Purchase
      * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {Object} params 구매 완료 script에 전달할 params
+     * @param {string} platform 빌링 플랫폼
+     * @param {Object} platformParams 빌링 플랫폼에 따른 추가 정보
      * @param {number} listPrice 원래 상품의 가격
      * @param {number} purchasedPrice 실제 구매한 가격
-     * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
-     * @param {string} purchaseData Google IAP API에서 응답받은 내용 중 purchase data
-     * @param {string} signature Google IAP API에서 응답받은 내용 중 signature
-     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
+     * @param {string} currency 'KRW', 'USD', 'JPY' 등
+     * @param {Object} [params] 구매 완료 script에 전달할 params
      */
-    completeGooglePurchase: function (id, params, listPrice, purchasedPrice, currency, purchaseData, signature, test) {
+    complete: function (id, platform, platformParams, listPrice, purchasedPrice, currency, params) {
 
       var data = {
-        params: params,
-        purchase_data: purchaseData,
-        signature: signature,
+        platform: platform,
+        platform_params: platformParams,
         list_price: listPrice,
         purchased_price: purchasedPrice,
         currency: currency,
-        test: test
+        params: params
       };
 
       var options = {
         method: "POST",
-        route: "google_purchases/complete/" + id,
+        route: "purchases/complete/" + id,
         data: data
       };
 
       return Hive5._request(options);
     },
 
-    _getPurchaseStatus: function (platform, id) {
+    /**
+     * 구매 상태를 확인한다.
+     * @memberOf Hive5.Purchase
+     * @param {string} id 구매 시작때 발급받은 구매 id
+     */
+    get: function (id) {
       var options = {
         method: "GET",
-        route: platform + "_purchases/" + id
+        route: "purchases/" + id
       };
 
       return Hive5._request(options);
     },
-
-    /**
-     * 구글 구매 상태를 확인한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     */
-    getGooglePurchaseStatus: function (id) {
-      return this._getPurchaseStatus("google", id);
-    },
-
-    /**
-     * 애플 결제를 시작한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} productCode 상품 코드
-     * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
-     * @param {string} receiver.platform 사용자의 social platform
-     * @param {string} receiver.id 사용자의 user id
-     */
-    createApplePurchase: function (productCode, receiver) {
-
-      var data = {
-        product_code: productCode,
-        receiver: receiver
-      };
-
-      var options = {
-        method: "POST",
-        route: "apple_purchases",
-        data: data
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * 애플 결제를 완료 처리한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {Object} params 구매 완료 script에 전달할 params
-     * @param {number} listPrice 원래 상품의 가격
-     * @param {number} purchasedPrice 실제 구매한 가격
-     * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
-     * @param {string} receipt Apple 결제 후 받은 'receipt'. Base 64 Encoding이 필요함
-     * @param {boolean} [isSandbox=false] receipt가 apple의 sandbox용 일 경우에 true. 그렇지 않으면 false
-     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
-     */
-    completeApplePurchase: function (id, params, listPrice, purchasedPrice, currency, receipt, isSandbox, test) {
-
-      var data = {
-        params: params,
-        receipt: receipt,
-        is_sandbox: isSandbox,
-        list_price: listPrice,
-        purchased_price: purchasedPrice,
-        currency: currency,
-        test: test
-      };
-
-      var options = {
-        method: "POST",
-        route: "apple_purchases/complete/" + id,
-        data: data
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * 애플 구매 상태를 확인한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     */
-    getApplePurchaseStatus: function (id) {
-      return this._getPurchaseStatus("apple", id);
-    },
-
-    /**
-     * 네이버 결제를 시작한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} productCode 네이버에 등록된 상품의 code
-     * @param {string} paymentSequence 네이버 결제 완료후 전달받은 paymentSeq 값
-     * @param {Object} [receiver] 다른 사용자에게 선물할 때, 선물 받을 사용자
-     * @param {string} receiver.platform 사용자의 social platform
-     * @param {string} receiver.id 사용자의 user id
-     */
-    createNaverPurchase: function (productCode, paymentSequence, receiver) {
-
-      var data = {
-        product_code: productCode,
-        payment_sequence: paymentSequence,
-        receiver: receiver
-      };
-
-      var options = {
-        method: "POST",
-        route: "naver_purchases",
-        data: data
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * 네이버 결제를 완료 처리한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     * @param {Object} params 구매 완료 script에 전달할 params
-     * @param {number} listPrice 원래 상품의 가격
-     * @param {number} purchasedPrice 실제 구매한 가격
-     * @param {string} currency 'KRW', 'USD', 'JPY' 중 하나
-     * @param {boolean} [test=false] 결제 테스트 모드로 수행할 때 true로 세팅한다
-     */
-    completeNaverPurchase: function (id, params, listPrice, purchasedPrice, currency, test) {
-
-      var data = {
-        params: params,
-        list_price: listPrice,
-        purchased_price: purchasedPrice,
-        currency: currency,
-        test: test
-      };
-
-      var options = {
-        method: "POST",
-        route: "naver_purchases/complete/" + id,
-        data: data
-      };
-
-      return Hive5._request(options);
-    },
-
-    /**
-     * 네이버 구매 상태를 확인한다.
-     * @memberOf Hive5.Purchase
-     * @param {string} id 구매 시작때 발급받은 구매 id
-     */
-    getNaverPurchaseStatus: function (id) {
-      return this._getPurchaseStatus("naver", id);
-    }
-
   };
 
 }(this));
