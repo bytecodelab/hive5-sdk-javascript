@@ -1327,12 +1327,8 @@
     INVALID_GOOGLE_PURCHASE_DATA: 2204,
     /** Invalid google signature */
     INVALID_GOOGLE_SIGNATURE: 2205,
-    /** No google iap public key is registered */
-    NO_GOOGLE_IAP_PUBLIC_KEY: 2206,
     /** Invalid google iap public key */
     INVALID_GOOGLE_IAP_PUBLIC_KEY: 2207,
-    /** No kakao app auth info */
-    NO_KAKAO_APP_AUTH_INFO: 2208,
 
     /** No iap conversion */
     NO_IAP_CONVERSION: 2303,
@@ -1392,6 +1388,12 @@
     ALREADY_EXISTING_PLATFORM_USER_EMAIL: 4002,
     /** Invalid name or password */
     INVALID_NAME_OR_PASSWORD: 4003,
+    /** Unsupported platform */
+    UNSUPPORTED_PLATFORM: 4100,
+    /** Authentication failed */
+    AUTH_FAILED: 4101,
+    /** No external platform info */
+    NO_EXTERNAL_PLATFORM_INFO: 4200,
 
     /** Invalid push payload */
     INVALID_PAYLOAD: 5001,
