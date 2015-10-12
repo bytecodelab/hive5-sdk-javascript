@@ -375,8 +375,8 @@
     updatePushToken: function (platform, token) {
 
       var data = {
-        push_platform: platform,
-        push_token: token
+        platform: platform,
+        token: token
       };
 
       var options = {
