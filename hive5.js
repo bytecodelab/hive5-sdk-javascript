@@ -220,8 +220,6 @@
         data.user = {platform:platform, id:id}
       }
 
-      if ()
-
       var options = {
         method: "POST",
         route: "auth/log_in",

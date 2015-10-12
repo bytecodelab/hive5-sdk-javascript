@@ -177,6 +177,7 @@ QUnit.test("Settings.updatePushToken test", function (assert) {
   initTest().then(function () {
     var p = Hive5.Settings.updatePushToken("gcm", "test_token");
     p.then(function (response) {
+      console.log(response.raw)
       var jsonData = JSON.parse(response.raw);
       assert.equal(jsonData.result_code, 0, "Passed!");
       done();
