@@ -59,12 +59,13 @@ markdown을 지원하기 위해 어떻게 하고 있는 지 주목하라.
 }
 ```
 
-### jsdoc 출력물 배포위치
+### API 레퍼런스 출력물 배포위치
 
 phase | location
 --- | ---
-alpha | s3버킷  maui-alpha-developer/ko-kr/javascript-sdk-doc
+alpha | s3버킷 maui-alpha-developer/ko-kr/javascript-sdk-doc
 beta | s3버킷 maui-developer/ko-kr/javascript-sdk-doc
+
 
 ## jsdoc
 
