@@ -59,6 +59,13 @@ markdown을 지원하기 위해 어떻게 하고 있는 지 주목하라.
 }
 ```
 
+### jsdoc 출력물 배포
+
+alpha : s3버킷  maui-alpha-developer/ko-kr/javascript-sdk-doc
+beta : s3버킷 maui-developer/ko-kr/javascript-sdk-doc
+
+## jsdoc
+
 jsdoc은 아래 페이지에서 배포 중이다.
 [https://github.com/jsdoc3/jsdoc/releases](https://github.com/jsdoc3/jsdoc/releases)
 
