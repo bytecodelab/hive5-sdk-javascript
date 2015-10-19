@@ -63,8 +63,8 @@ markdown을 지원하기 위해 어떻게 하고 있는 지 주목하라.
 
 phase | location
 --- | ---
-alpha | s3버킷 maui-alpha-developer/ko-kr/javascript-sdk-doc
-beta | s3버킷 maui-developer/ko-kr/javascript-sdk-doc
+alpha | s3버킷 maui-alpha-developer/ko-kr/javascript-sdk-doc/[버전]
+beta | s3버킷 maui-prod-developer/ko-kr/javascript-sdk-doc/[버전]
 
 
 ## jsdoc
