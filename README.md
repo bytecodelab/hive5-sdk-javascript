@@ -6,6 +6,11 @@ Hive5 Javascript SDK
 ## Play Framework
 https://www.playframework.com/documentation/2.4.x/CorsFilter
 
+# min.js 만들기
+
+아래 온라인 사이트를 이용한다.
+http://jscompress.com/
+
 
 # Documenting APIs
 자동 문서화를 위해 JSDoc의 규약을 따른다.  
