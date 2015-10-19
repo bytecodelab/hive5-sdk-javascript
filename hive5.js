@@ -19,7 +19,7 @@
    * @memberOf Hive5
    * @var SDK Version
    */
-  Hive5.VERSION = "js1.0.0";
+  Hive5.VERSION = "js1.0.1";
   Hive5._apiVersion = "v6";
 }(this));
 
