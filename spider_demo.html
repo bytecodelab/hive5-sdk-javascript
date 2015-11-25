@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/slate/bootstrap.min.css">
+  <script src="./hive5.js"></script>
+  <script src="./hive5.spider.js"></script>
+  <title></title>
+</head>
+<body>
+<div class="container">
+  <h1>Hive5 Spider Demo</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="app-key-text">Hive5 App Key</label>
+        <input class="form-control" value="5a2a44c8-f9fe-476e-8df5-afce606428a5" id="app-key-text" type="text" >
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="kiter-endpoint-text">Kiter Host</label>
+        <input class="form-control" id="kiter-endpoint-text" type="text" placeholder="Kiter Host" value="http://alpha.rtapi.hive5.io/">
+        <input class="form-control" id="spider-endpoint-text" type="text" readonly="" style="margin-top:5px;">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-default" id="connect-button">Connect</button>
+        <button class="btn btn-default" id="disconnect-button" disabled="">Disconnect</button>
+        <span id="ws-status"/>
+      </div>
+      <hr>
+      <div class="form-group">
+        <label class="control-label" for="zone-text">Zone Topic Uri</label>
+        <input class="form-control" id="zone-text" type="text" placeholder="Zone Topic Uri" value="io.hive5.spider.topic.zone.192.chat01">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-default" id="enter-zone-button" disabled="">Enter Zone</button>
+        <button class="btn btn-default" id="leave-zone-button" disabled="">Leave Zone</button>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="zone-chat-textarea">Zone Chat</label>
+        <textarea class="form-control" id="zone-chat-textarea" readonly="">
+        </textarea>
+      </div>
+      <div class="form-group">
+        <div class="col-md-9">
+          <input class="form-control" id="message-text" type="text" placeholder="Write your message...">
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-default btn-justified" id="send-button" disabled="">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+  $('#connect-button').on("click", function () {
+    //$('#connect-button').attr('disabled',true);
+    var appKey = $('#app-key-text').val();
+    Hive5Spider.init(appKey);
+
+    var kiterEndPoint = $('#kiter-endpoint-text').val();
+    var p = Hive5Spider.connect(kiterEndPoint);
+    //p.then(function(response) {
+      //$('#disconnect-button').removeAttr('disabled');
+    //});
+  });
+
+  Hive5Spider.openCallback = function (event) {
+    var label = "<div class='label label-success'>OPEN</div>";
+    $('#ws-status').html(label);
+    $('#spider-endpoint-text').val(Hive5Spider.currentSpiderEndPoint);
+    $('#connect-button').attr('disabled',true);
+    $('#disconnect-button').removeAttr('disabled');
+    $('#enter-zone-button').removeAttr('disabled');
+  };
+
+  Hive5Spider.closeCallback = function (event) {
+    var label = "<div class='label label-danger'>CLOSED</div>";
+    $('#ws-status').html(label);
+    $('#ws-endpoint').val("");
+    $('#disconnect-button').attr('disabled',true);
+    $('#connect-button').removeAttr('disabled');
+    $('#enter-zone-button').attr('disabled',true);
+    $('#leave-zone-button').attr('disabled',true);
+  };
+
+  // Enter zone
+  $('#enter-zone-button').on("click", function () {
+    Hive5Spider.enterZone($('#zone-text').val());
+  });
+
+</script>
+</html>

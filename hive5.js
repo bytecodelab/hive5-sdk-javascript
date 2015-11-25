@@ -2,7 +2,7 @@
  * @fileOverview Hive5 JavaScript SDK
  * <br>
  * <br>Visit {@link http://www.hive5.io}
- * @version 1.0.1-beta
+ * @version 1.0.2-beta
  * @author Gilbert Lee, Artie Choi
  * @copyright 2015 BytecodeLab, Co.
  */
@@ -19,7 +19,7 @@
    * @memberOf Hive5
    * @var SDK Version
    */
-  Hive5.VERSION = "js1.0.1";
+  Hive5.VERSION = "js1.0.2";
   Hive5._apiVersion = "v6";
 }(this));
 
@@ -105,8 +105,8 @@
         request: request
       };
 
-     var xhr = new Hive5.XMLHttpRequest();
-     response.xhr = xhr;
+      var xhr = new Hive5.XMLHttpRequest();
+      response.xhr = xhr;
 
       xhr.open(request.method, request.url, true);
 
