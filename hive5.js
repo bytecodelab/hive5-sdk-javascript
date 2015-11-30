@@ -352,6 +352,30 @@
       };
 
       return Hive5._request(options);
+    },
+
+    /**
+     * 플레이어 타겟팅 때 기준이 될 metadata를 저장한다. 플레이어 타겟팅은 푸시 메세지 전송 등에 사용된다.
+     * @memberOf Hive5.Player
+     * @param {Object} metadata 메타데이터
+     * @param {number} [metadata.level] 플레이어 레벨
+     * @param {number} [metadata.exp] 플레이어 경험치
+     * @param {number} [metadata.stage] stage 정보
+     * @param {*} [metadata.hero] Hero와 관련된 정보들
+     * @param {*} [metadata.play] 게임플레이과 관련된 정보들
+     * @param {*} [metadata.extras] 추가데이터
+     * @return {Hive5.Promise}
+     */
+    setMetadata: function (metadata) {
+
+      var options = {
+        method: "POST",
+        route: "players/me/metadata",
+        data : {level: metadata.level, exp: metadata.exp, stage: metadata.stage, hero: metadata.hero,
+          play: metadata.play, extras: metadata.extras}
+      };
+
+      return Hive5._request(options);
     }
   };
 }(this));

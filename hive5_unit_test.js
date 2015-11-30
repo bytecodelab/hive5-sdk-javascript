@@ -167,6 +167,32 @@ QUnit.test("Player.extras test", function (assert) {
   });
 });
 
+QUnit.test("Player.metadata test", function (assert) {
+  var done = assert.async();
+
+  initTest().then(function () {
+    var p = Hive5.Player.setMetadata({level:1, exp:100, hero:"wizard"});
+    p.then(function (response) {
+      var jsonData = JSON.parse(response.raw);
+      assert.equal(jsonData.result_code, 0, "Passed!");
+
+      var p = Hive5.Player.setMetadata({stage:99, play:"arena"});
+      p.then(function (response) {
+        console.log(response.raw)
+        var jsonData = JSON.parse(response.raw);
+        assert.equal(jsonData.result_code, 0, "Passed!");
+        done();
+      }).catch(function () {
+        assert.ok(false, "fails");
+        done();
+      });
+
+    }).catch(function () {
+      assert.ok(false, "fails");
+      done();
+    });
+  });
+});
 
 /*
  * Settings
@@ -528,7 +554,7 @@ QUnit.test("Purchase.create test", function (assert) {
   var done = assert.async();
 
   initTest().then(function () {
-    var p = Hive5.Purchase.create("test", {}, "code_001");
+    var p = Hive5.Purchase.create("tester", {}, "code_001");
     p.then(function (response) {
       console.log(response.raw);
 
@@ -549,7 +575,7 @@ QUnit.test("Purchase.create test", function (assert) {
         var listPrice = 100;
         var purchasedPrice = 100;
 
-        var p = Hive5.Purchase.complete(jsonData.id, "test", {auth_key:"test_key"}, listPrice, purchasedPrice, "KRW", params);
+        var p = Hive5.Purchase.complete(jsonData.id, "tester", {auth_key:"test_key"}, listPrice, purchasedPrice, "KRW", params);
         p.then(function (response) {
 
           console.log(response.raw);
